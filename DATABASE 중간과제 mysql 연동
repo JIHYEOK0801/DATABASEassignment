@@ -1,0 +1,289 @@
+
+import java.awt.event.*;
+import java.awt.*;
+//import java.awt.event.ActionListener;
+import java.sql.*;
+
+import javax.swing.*;
+//import javax.swing.JFrame;
+//import javax.swing.JPanel;
+//import javax.swing.JScrollPane;
+//import javax.swing.JTextArea;
+
+
+public class BookListSwing extends JFrame implements ActionListener {
+   JButton btnReset, btnSearch1, btnSearch2, btnSearch3, btnOk;
+   JTextArea txtResult;
+   JTextField txtField1,txtField2,txtField3,txtField4,txtField5;
+
+   JPanel pn1,pn2;
+
+   static Connection con;
+   Statement stmt;
+   ResultSet rs;
+   String Driver = "";
+   String url = "jdbc:mysql://localhost:3306/madang?&serverTimezone=Asia/Seoul&useSSL=false";
+   String userid = "madang";
+   String pwd = "madang";
+
+   
+    
+   public BookListSwing() {
+      super("16011069 장지혁");
+      layInit();
+      conDB();
+      setVisible(true);
+      setBounds(200, 200, 600, 600); //가로위치,세로위치,가로길이,세로길이
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+   }
+
+   public void layInit() {
+      btnOk = new JButton("입력1");
+      btnReset = new JButton("초기화");
+      btnSearch1 = new JButton("검색1");
+      btnSearch2 = new JButton("검색2");
+      btnSearch3 = new JButton("검색3");
+      txtResult = new JTextArea();
+      txtField1 = new JTextField("");
+      txtField2 = new JTextField("");
+      txtField3 = new JTextField("");
+      txtField4 = new JTextField("");
+      txtField5 = new JTextField("");
+      
+      pn1 = new JPanel();
+      pn2 = new JPanel();
+     
+      pn1.add(btnOk);//입력1 버튼
+      pn1.add(btnReset);//초기화버튼
+      pn1.add(btnSearch1);//검색 1버튼 
+      pn1.add(btnSearch2);//검색 2버튼
+      pn1.add(btnSearch3);//검색 3버튼
+      pn2.setLayout(new GridLayout(6,2));
+
+      pn2.add(new JLabel("ORDER ID :"));
+      pn2.add(txtField1);
+      pn2.add(new JLabel("CUST ID :"));
+      pn2.add(txtField2);
+      pn2.add(new JLabel("BOOK ID :"));
+      pn2.add(txtField3);
+      pn2.add(new JLabel("SALEPRICE :"));
+      pn2.add(txtField4);
+      pn2.add(new JLabel("ORDERDATE :                                      ex) YYYY-MM-DD "));
+      pn2.add(txtField5);
+      pn2.add(new JLabel("orders테이블에  등록하려면  입력1 버튼을  누르세요"));
+      pn2.add(btnOk);
+      
+
+      txtResult.setEditable(false);
+      JScrollPane scrollPane = new JScrollPane(txtResult);   
+      add("North", pn1);
+      add("Center", scrollPane);
+      add("South",pn2);
+
+      btnOk.addActionListener(this);
+      btnReset.addActionListener(this);
+      btnSearch1.addActionListener(this);
+      btnSearch2.addActionListener(this);
+      btnSearch3.addActionListener(this);
+      txtField1.addActionListener(this);
+      txtField2.addActionListener(this);
+      txtField3.addActionListener(this);
+      txtField4.addActionListener(this);
+      txtField5.addActionListener(this);
+   }
+   
+   public void conDB() {
+      try {
+         Class.forName("com.mysql.cj.jdbc.Driver");
+         System.out.println("드라이버 로드 성공");
+      } catch (ClassNotFoundException e) {
+         e.printStackTrace();
+      }
+      
+      try { /* 데이터베이스를 연결하는 과정 */
+          System.out.println("데이터베이스 연결 준비...");
+          con = DriverManager.getConnection(url, userid, pwd);
+          System.out.println("데이터베이스 연결 성공");
+       } catch (SQLException e1) {
+          e1.printStackTrace();
+       }
+   }
+   public void insertMydata() { //초기화 할때 쓰임
+	try{
+		String delete[] = new String[5];
+		String insertBook[] = new String[15];
+		String insertCustomer[] = new String[10];
+		String insertOrders[] = new String[15];
+		int i;
+	stmt = con.createStatement();
+	
+	delete[0] = "SET foreign_key_checks =0;";
+	delete[1] = "delete from Book ;";
+	delete[2] = "delete from Customer ;";
+	delete[3] = "delete from Orders ;";
+	delete[4] = "SET foreign_key_checks =1;";
+	
+	insertBook[0] = "INSERT INTO Book Values (1,'축구의 역사','굿스포츠',7000)";
+	insertBook[1] = "INSERT INTO Book Values (2,'축구아는 여자','나무수',13000)";
+	insertBook[2] = "INSERT INTO Book Values (3,'축구의 이해','대한미디어',22000)";
+	insertBook[3] = "INSERT INTO Book Values (4,'골프 바이블','대한 미디어',35000)";
+	insertBook[4] = "INSERT INTO Book Values (5,'피겨 교본','굿스포츠',8000)";
+	insertBook[5] = "INSERT INTO Book Values (6,'역도 단계별기술','굿스포츠',6000)";
+	insertBook[6] = "INSERT INTO Book Values (7,'야구의 추억','이상미디어',20000)";
+	insertBook[7] = "INSERT INTO Book Values (8,'야구를 부탁해','이상미디어',13000)";
+	insertBook[8] = "INSERT INTO Book Values (9,'올림픽 이야기','삼성당',7500)";
+	insertBook[9] = "INSERT INTO Book Values (10,'Olympic Champions','Pearson',13000)";
+	insertBook[10] = "INSERT INTO Book Values (11,'축구의 전술','지혁출판사',50000)";
+	insertBook[11] = "INSERT INTO Book Values (12,'축구의 전설','지혁출판사',30000)";
+	insertBook[12] = "INSERT INTO Book Values (13,'야구의 이해','갓세종',5000)";
+	insertBook[13] = "INSERT INTO Book Values (14,'야구의 역사','갓세종',8500)";
+	insertBook[14] = "INSERT INTO Book Values (15,'축구의 기본','대한축구협회',70000)";
+	
+	insertCustomer[0] = "INSERT INTO Customer VALUES (1, '박지성', '영국 맨체스타', '000-5000-0001')";
+	insertCustomer[1] = "INSERT INTO Customer VALUES (2, '김연아', '대한민국 서울', '000-6000-0001')";
+	insertCustomer[2] = "INSERT INTO Customer VALUES (3, '장미란', '대한민국 강원도', '000-7000-0001')";
+	insertCustomer[3] = "INSERT INTO Customer VALUES (4, '추신수', '미국 클리블랜드', '000-8000-0001')";
+	insertCustomer[4] = "INSERT INTO Customer VALUES (5, '박세리', '대한민국 대전',  NULL)";
+	insertCustomer[5] = "INSERT INTO Customer VALUES (6, '손흥민', '영국 런던',  '000-9000-0001')";
+	insertCustomer[6] = "INSERT INTO Customer VALUES (7, '호날두', '이탈리아 토리노',  '000-1000-0001')";
+	insertCustomer[7] = "INSERT INTO Customer VALUES (8, '서장훈', '대한민국 서울',  '010-1000-0001')";
+	insertCustomer[8] = "INSERT INTO Customer VALUES (9, '메시', '스페인 카탈루냐',  '000-1577-1577')";
+	insertCustomer[9] = "INSERT INTO Customer VALUES (10, '류현진', '미국 LA',  '000-8282-8282')";
+	
+	insertOrders[0] = "INSERT INTO Orders VALUES (1, 1, 1, 6000, STR_TO_DATE('2014-07-01','%Y-%m-%d'))";
+	insertOrders[1] = "INSERT INTO Orders VALUES (2, 1, 3, 21000, STR_TO_DATE('2014-07-03','%Y-%m-%d'))";
+	insertOrders[2] = "INSERT INTO Orders VALUES (3, 2, 5, 8000, STR_TO_DATE('2014-07-03','%Y-%m-%d'))";
+	insertOrders[3] = "INSERT INTO Orders VALUES (4, 3, 6, 6000, STR_TO_DATE('2014-07-04','%Y-%m-%d'))";
+	insertOrders[4] = "INSERT INTO Orders VALUES (5, 4, 7, 20000, STR_TO_DATE('2014-07-05','%Y-%m-%d'))";
+	insertOrders[5] = "INSERT INTO Orders VALUES (6, 1, 2, 12000, STR_TO_DATE('2014-07-07','%Y-%m-%d'))";
+	insertOrders[6] = "INSERT INTO Orders VALUES (7, 4, 8, 13000, STR_TO_DATE( '2014-07-07','%Y-%m-%d'))";
+	insertOrders[7] = "INSERT INTO Orders VALUES (8, 3, 10, 12000, STR_TO_DATE('2014-07-08','%Y-%m-%d'))";
+	insertOrders[8] = "INSERT INTO Orders VALUES (9, 2, 10, 7000, STR_TO_DATE('2014-07-09','%Y-%m-%d'))";
+	insertOrders[9] = "INSERT INTO Orders VALUES (10, 3, 8, 13000, STR_TO_DATE('2014-07-10','%Y-%m-%d'))";
+	insertOrders[10] = "INSERT INTO Orders VALUES (11, 2, 4, 35000, STR_TO_DATE('2014-07-11','%Y-%m-%d'))";
+	insertOrders[11] = "INSERT INTO Orders VALUES (12, 3, 10, 13000, STR_TO_DATE('2014-07-12','%Y-%m-%d'))";
+	insertOrders[12] = "INSERT INTO Orders VALUES (13, 1, 9, 7000, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertOrders[13] = "INSERT INTO Orders VALUES (14, 2, 5, 8000, STR_TO_DATE('2014-07-14','%Y-%m-%d'))";
+	insertOrders[14] = "INSERT INTO Orders VALUES (15, 4, 1, 7000, STR_TO_DATE('2014-07-15','%Y-%m-%d'))";
+	
+	for(i=0;i<5;i++)
+		stmt.executeUpdate(delete[i]);
+	for(i=0;i<15;i++)
+		stmt.executeUpdate(insertBook[i]);
+	for(i=0;i<10;i++)
+		stmt.executeUpdate(insertCustomer[i]);
+	for(i=0;i<15;i++)
+		stmt.executeUpdate(insertOrders[i]);
+	
+	}catch(SQLException e3)
+	{
+		System.out.println("쿼리초기화작업실패"+e3);
+	}
+   }
+   
+   
+   
+   
+   @Override
+   public void actionPerformed(ActionEvent e) { // 액션담당 함수
+    
+      try {
+         stmt = con.createStatement();
+         String query,orderid, custid,bookid,saleprice,orderdate;
+         if (e.getSource() == btnOk) { // btnOk를 눌렀을 때
+        	 orderid = txtField1.getText();
+        	 custid = txtField2.getText();
+        	 bookid = txtField3.getText();
+        	 saleprice = txtField4.getText();
+        	 orderdate = txtField5.getText();
+        	 
+        	 txtField1.setText("");
+        	 txtField2.setText("");
+        	 txtField3.setText("");
+        	 txtField4.setText("");
+        	 txtField5.setText("");
+        	 
+        	 stmt.executeUpdate("INSERT INTO Orders VALUES ("+orderid+","+custid+","+bookid+","+saleprice+","+ "STR_TO_DATE('"+orderdate+"','%Y-%m-%d'))");
+        	 txtResult.setText("Orders 테이블에 등록되었습니다!!");
+        	 
+            }
+         
+         else if (e.getSource() == btnReset) {// btnReset을 눌렀을 때
+            txtResult.setText("");//화면의 텍스트들을 지우는 역할인듯
+            insertMydata();
+            txtResult.setText("데이터가 초기화 되었습니다!!");
+         }
+         
+         else if(e.getSource() == btnSearch1) {//검색1버튼을 눌렀을 때
+        	 query = "SELECT * FROM Book ";
+        	txtResult.setText("");
+        	txtResult.setText("BOOKID \t BOOK NAME \t PUBLISHER \t PRICE\n");
+        	rs = stmt.executeQuery(query);
+        	while (rs.next()) {
+                String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3) + "\t" + rs.getInt(4)
+                      + "\n";
+                txtResult.append(str);
+        						}
+         }
+         else if(e.getSource() == btnSearch2) {//검색2버튼을 눌렀을 때
+        	 query = "SELECT * FROM Orders";
+         	txtResult.setText("");
+         	txtResult.setText("ORDERID \t CUSTID \t BOOKID \t SALEPRICE \t ORDERDATE\n");
+         	rs = stmt.executeQuery(query);
+         	while (rs.next()) {
+                 String str = rs.getInt(1) + "\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5)
+                       + "\n";
+                 txtResult.append(str);
+         						}
+          }
+         else if(e.getSource() == btnSearch3) {//검색3버튼을 눌렀을 때
+        	 query = "SELECT * FROM Customer";
+         	txtResult.setText("");
+         	txtResult.setText("CUSTID \t NAME \t ADDRESS \t\t  PHONE\n");
+         	rs = stmt.executeQuery(query);
+         	while (rs.next()) {
+                 String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3) + "\t\t" + rs.getString(4)
+                       + "\n";
+                 txtResult.append(str);
+         						}
+          }
+         
+         
+      } catch (Exception e2) {
+         System.out.println("쿼리 읽기 실패 :" + e2);
+         txtResult.setText("오류 메세지 :" + e2);
+         
+/*      } finally {
+         try {
+            if (rs != null)
+               rs.close();
+            if (stmt != null)
+               stmt.close();
+            if (con != null)
+               con.close();
+         } catch (Exception e3) {
+            // TODO: handle exception
+         }
+  */
+      }
+
+   }
+
+   public static void main(String[] args) {
+      BookListSwing BLS = new BookListSwing();
+      
+      //BLS.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      //BLS.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      
+      BLS.addWindowListener(new WindowAdapter() {
+    	  public void windowClosing(WindowEvent we) {
+    		try {
+    			con.close();
+    		} catch (Exception e4) { 	}
+    		System.out.println("프로그램 완전 종료!");    		
+    	    System.exit(0);
+    	  }
+    	});
+   }
+}
+
