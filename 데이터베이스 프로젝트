@@ -1,0 +1,419 @@
+
+import java.awt.event.*;
+import java.awt.*;
+//import java.awt.event.ActionListener;
+import java.sql.*;
+
+import javax.swing.*;
+//import javax.swing.JFrame;
+//import javax.swing.JPanel;
+//import javax.swing.JScrollPane;
+//import javax.swing.JTextArea;
+
+
+public class BookListSwing extends JFrame implements ActionListener {
+   JButton btnReset, btnSearch1, btnSearch2, btnSearch3, btnOk;
+   JTextArea txtResult;
+   JTextField txtField1,txtField2,txtField3,txtField4,txtField5;
+
+   JPanel pn1,pn2;
+
+   static Connection con;
+   Statement stmt;
+   ResultSet rs;
+   String Driver = "";
+   String url = "jdbc:mysql://localhost:3306/madang?&serverTimezone=Asia/Seoul&useSSL=false";
+   String userid = "madang";
+   String pwd = "madang";
+
+   
+    
+   public BookListSwing() {
+      super("16011069 장지혁");
+      layInit();
+      conDB();
+      setVisible(true);
+      setBounds(200, 200, 600, 600); //가로위치,세로위치,가로길이,세로길이
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+   }
+
+   public void layInit() {
+      btnOk = new JButton("입력1");
+      btnReset = new JButton("초기화");
+      btnSearch1 = new JButton("검색1");
+      btnSearch2 = new JButton("검색2");
+      btnSearch3 = new JButton("검색3");
+      txtResult = new JTextArea();
+      txtField1 = new JTextField("");
+      txtField2 = new JTextField("");
+      txtField3 = new JTextField("");
+      txtField4 = new JTextField("");
+      txtField5 = new JTextField("");
+      
+      pn1 = new JPanel();
+      pn2 = new JPanel();
+     
+      pn1.add(btnOk);//입력1 버튼
+      pn1.add(btnReset);//초기화버튼
+      pn1.add(btnSearch1);//검색 1버튼 
+      pn1.add(btnSearch2);//검색 2버튼
+      pn1.add(btnSearch3);//검색 3버튼
+      pn2.setLayout(new GridLayout(6,2));
+
+      pn2.add(new JLabel("ORDER ID :"));
+      pn2.add(txtField1);
+      pn2.add(new JLabel("CUST ID :"));
+      pn2.add(txtField2);
+      pn2.add(new JLabel("BOOK ID :"));
+      pn2.add(txtField3);
+      pn2.add(new JLabel("SALEPRICE :"));
+      pn2.add(txtField4);
+      pn2.add(new JLabel("ORDERDATE :                                      ex) YYYY-MM-DD "));
+      pn2.add(txtField5);
+      pn2.add(new JLabel("orders테이블에  등록하려면  입력1 버튼을  누르세요"));
+      pn2.add(btnOk);
+      
+
+      txtResult.setEditable(false);
+      JScrollPane scrollPane = new JScrollPane(txtResult);   
+      add("North", pn1);
+      add("Center", scrollPane);
+      add("South",pn2);
+
+      btnOk.addActionListener(this);
+      btnReset.addActionListener(this);
+      btnSearch1.addActionListener(this);
+      btnSearch2.addActionListener(this);
+      btnSearch3.addActionListener(this);
+      txtField1.addActionListener(this);
+      txtField2.addActionListener(this);
+      txtField3.addActionListener(this);
+      txtField4.addActionListener(this);
+      txtField5.addActionListener(this);
+   }
+   
+   public void conDB() {
+      try {
+         Class.forName("com.mysql.cj.jdbc.Driver");
+         System.out.println("드라이버 로드 성공");
+      } catch (ClassNotFoundException e) {
+         e.printStackTrace();
+      }
+      
+      try { /* 데이터베이스를 연결하는 과정 */
+          System.out.println("데이터베이스 연결 준비...");
+          con = DriverManager.getConnection(url, userid, pwd);
+          System.out.println("데이터베이스 연결 성공");
+       } catch (SQLException e1) {
+          e1.printStackTrace();
+       }
+   }
+   
+   
+   public void createTable() {//테이블 구현
+	  try { 
+	   String sql[] = new String[7];
+	   StringBuilder sb = new StringBuilder();
+	   stmt = con.createStatement();
+	   
+	   sql[0] = sb.append("create table Companylist(")//table1
+               .append("companyid INTEGER PRIMARY KEY,")//캠핑카대여회사ID
+               .append("companyname varchar(45),")//회사명
+               .append("companyaddress varchar(45),")//주소
+               .append("companyphone varchar(45),")//전화번호
+               .append("managername varchar(45),")//담당자이름
+               .append("managermail varchar(45)")//담당자이메일
+               .append(");").toString();
+	   	stmt.execute(sql[0]);
+	   	sb.delete(0,sb.length());
+	   
+	   sql[1] = sb.append("create table Campingcarlist(")//table2
+               .append("carid INTEGER PRIMARY KEY,")//캠핑카등록ID
+               .append("carname varchar(45),")//캠핑카 이름
+               .append("carnumber INTEGER,")//캠핑카 차량번호
+               .append("carmax INTEGER,")//캠핑카 인원수
+               .append("carimage INTEGER,")//캠핑카이미지
+               .append("cardetail varchar(45),")//캠핑카상세정보
+               .append("rentprice INTEGER,")//캠핑카대여비용
+               .append("companyid INTEGER,")//캠핑카대여회사ID
+               .append("enrolldate DATE")//캠핑카등록일자
+               .append(");").toString();
+	   	stmt.execute(sql[1]);
+	   	sb.delete(0,sb.length());
+	   			
+	   	sql[2] = sb.append("create table CampingCustomer(")//table3
+	   			.append("licenseid INTEGER PRIMARY KEY,")//운전면허증번호
+	   			.append("customername varchar(45),")//고객명
+	   			.append("customeraddress varchar(45),")//고객주소
+	   			.append("customerphone varchar(45),")//고객전화번호
+	   			.append("customeremail varchar(45)")//고객이메일
+	   			.append(");").toString();
+	   	stmt.execute(sql[2]);
+	   	sb.delete(0, sb.length());
+	   			
+	   	sql[3] = sb.append("create table AvailableCampingcarList(")//table4
+	   			.append("rentid INTEGER PRIMARY KEY,")//고유대여번호
+	   			.append("carID INTEGER,")//캠핑카등록ID
+	   			.append("licenseID INTEGER,")//운전면허증번호
+	   			.append("companyID INTEGER,")//캠핑카대여회사ID
+	   			.append("startdate DATE,")//대여시작일
+	   			.append("enddate DATE,")//대여기간
+	   			.append("rentprice INTEGER,")//청구요금
+	   			.append("depositdate DATE,")//납입기한
+	   			.append("etc varchar(45),")//기타청구내역
+	   			.append("etcprice INTEGER")//기타청구요금정보
+	   			.append(");").toString();
+	   	stmt.execute(sql[3]);
+	   	sb.delete(0,  sb.length());
+	   			
+	   	sql[4] = sb.append("create table CarCheck(")//table5
+	   			.append("rentID INTEGER,")//고유대여번호
+	   			.append("carID INTEGER,")//캠핑카등록ID
+	   			.append("frontimage INTEGER,")//앞부분사진
+	   			.append("leftimage INTEGER,")//왼쪽사진
+	   			.append("rightimage INTEGER,")//오른쪽사진
+	   			.append("backimage INTEGER,")//뒤쪽사진
+	   			.append("havetofix INTEGER")//수리필요여부
+	   			.append(");").toString();
+	   	stmt.execute(sql[4]);
+	   	sb.delete(0,  sb.length());
+	   			
+	   	sql[5] = sb.append("create table FixInformation(")//table6
+	   			.append("fixid INTEGER,")//고유정비번호
+	   			.append("carid INTEGER,")//캠핑카등록ID
+	   			.append("carcenterid INTEGER,")//캠핑카정비소ID
+	   			.append("companyid INTEGER,")//캠핑카대여회사ID
+	   			.append("licenseid INTEGER,")//운전면허증번호
+	   			.append("fix varchar(45),")//정비내역
+	   			.append("fixdate DATE,")//수리날짜
+	   			.append("fixprice INTEGER,")//수리비용
+	   			.append("depositdate DATE,")//납입기한
+	   			.append("etcfix varchar(45)")//기타정비내역
+	   			.append(");").toString();
+	   	stmt.execute(sql[5]);
+	   	sb.delete(0,  sb.length());
+	   	
+	   	sql[6] = sb.append("create table CarcenterList(")//table7
+	   			.append("carcenterid INTEGER,")//캠핑카정비소ID
+	   			.append("carcentername varchar(45),")//정비소명
+	   			.append("carcenteraddress varchar(45),")//정비소주소
+	   			.append("carcenterphone varchar(45),")//정비소전화번호
+	   			.append("centermanagername varchar(45),")//담당자이름
+	   			.append("centermanageremail varchar(45)")//이메일정보
+	   			.append(");").toString();
+	   	stmt.execute(sql[6]);
+	   	sb.delete(0,  sb.length());
+	   	
+	  }catch(SQLException CreateError)
+		{
+			System.out.println("테이블초기화작업실패"+CreateError);
+		}
+	  
+   }
+   public void insertMydata() { //초기화 할때 쓰임
+	try{
+		String delete[] = new String[5];
+		String insertCompanyList[] = new String[15];
+		String insertCampingcarList[] = new String[15];
+		String insertCampingCustomer[] = new String[15];
+		String insertAvailableCampingcarList[] = new String[15];
+		String insertCarCheck[] = new String[15];
+		String insertFixInformation[] = new String[15];
+		String insertCarcenterList[] = new String[15];
+		int i;
+	stmt = con.createStatement();
+	
+	delete[0] = "SET foreign_key_checks =0;";
+	delete[1] = "delete from Book ;";
+	delete[2] = "delete from Customer ;";
+	delete[3] = "delete from Orders ;";
+	delete[4] = "SET foreign_key_checks =1;";
+	
+	insertCompanyList[0] = "INSERT INTO CompanyList Values (1,'삼성','서울 강남','000-0000-0001','메시','messi@gmail.com')";
+	insertCompanyList[1] = "INSERT INTO CompanyList Values (2,'LG','서울 서초','000-0000-0002','네이마르','neymar@gmail.com')";
+	insertCompanyList[2] = "INSERT INTO CompanyList Values (3,'현대','서울 송파','000-0000-0003','호날두','ronaldo@gmail.com')";
+	insertCompanyList[3] = "INSERT INTO CompanyList Values (4,'SK','성남 분당','000-0000-0004','베일','bale@gmail.com')";
+	insertCompanyList[4] = "INSERT INTO CompanyList Values (5,'롯데','경기 용인','000-0000-0005','오스카','oscar@gmail.com')";
+	insertCompanyList[5] = "INSERT INTO CompanyList Values (6,'포스코','고양 일산','000-0000-0006','포그바','pogba@gmail.com')";
+	insertCompanyList[6] = "INSERT INTO CompanyList Values (7,'한화','서울 목동','000-0000-0007','루니','rooney@gmail.com')";
+	insertCompanyList[7] = "INSERT INTO CompanyList Values (8,'GS','서울 동작','000-0000-0008','실바','silva@gmail.com')";
+	insertCompanyList[8] = "INSERT INTO CompanyList Values (9,'농협','서울 영등포','000-0000-0009','펠레','pele@gmail.com')";
+	insertCompanyList[9] = "INSERT INTO CompanyList Values (10,'신세계','대구 수성','000-0000-0010','헐크','hulk@gmail.com')";
+	insertCompanyList[10] = "INSERT INTO CompanyList Values (11,'CJ','서울 마포','000-0000-0011','디마리아','dimaria@gmail.com')";
+	insertCompanyList[11] = "INSERT INTO CompanyList Values (12,'한진','경기 수원','000-0000-0012','음바페','mbappe@gmail.com')";
+	insertCompanyList[12] = "INSERT INTO CompanyList Values (13,'두산','서울 용산','000-0000-0013','수아레스','suarez@gmail.com')";
+	insertCompanyList[13] = "INSERT INTO CompanyList Values (14,'대림','서울 광진','000-0000-0014','카바니','cavani@gmail.com')";
+	insertCompanyList[14] = "INSERT INTO CompanyList Values (15,'KT','서울 강서','000-0000-0015','피케','pique@gmail.com')";
+	
+	
+	insertCampingcarList[0] = "INSERT INTO CampingcarList VALUES (1, 'QM3', 1111, 4, 1, 'NULL', 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[1] = "INSERT INTO CampingcarList VALUES (2, '엑센트 디젤',1112, 4, 1, 'NULL', 100000, 5, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[2] = "INSERT INTO CampingcarList VALUES (3, '쏘나타 하이브리드', 1113, 4, 1, 'NULL', 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[3] = "INSERT INTO CampingcarList VALUES (4, 'i30 디젤', 1114, 4, 1, 'NULL', 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[4] = "INSERT INTO CampingcarList VALUES (5, 'K5 하이브리드', 1115, 4, 1, 'NULL', 100000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[5] = "INSERT INTO CampingcarList VALUES (6, 'SM5 디젤', 1116, 6, 1, 'NULL', 100000, 6, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[6] = "INSERT INTO CampingcarList VALUES (7, '모닝 CVT', 1117, 6, 1, 'NULL', 120000, 9, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[7] = "INSERT INTO CampingcarList VALUES (8, 'K3 디젤', 1118, 6, 1, '생각보다작음', 120000, 10, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[8] = "INSERT INTO CampingcarList VALUES (9, '아반떼 디젤', 1119, 6, 1, 'NULL', 120000, 11, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[9] = "INSERT INTO CampingcarList VALUES (10, 'K7 하이브리드', 1120, 8, 1, 'NULL', 120000, 15, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[10] = "INSERT INTO CampingcarList VALUES (11, '그랜저 하이브리드', 1121, 8, 1, 'NULL', 120000, 12, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[11] = "INSERT INTO CampingcarList VALUES (12, '쉐보레 스파크', 1122, 8, 1, 'NULL', 120000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[12] = "INSERT INTO CampingcarList VALUES (13, '옵티머스프라임', 1123, 8, 1, '변신가능함', 140000, 7, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[13] = "INSERT INTO CampingcarList VALUES (14, '범블비', 1124, 10, 1, '변신가능함', 140000, 8, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[14] = "INSERT INTO CampingcarList VALUES (15, '벤츠', 1125, 12, 1, '외제차임', 990000, 3, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	
+	insertCampingCustomer[0] = "INSERT INTO CampingCustomer VALUES (1, '조영남', '서울 강남', '000-0000-0001', 'yn@gmail.com')";
+	insertCampingCustomer[1] = "INSERT INTO CampingCustomer VALUES (2, '정지훈', '서울 서초', '000-0000-0002', 'jh@gmail.com')";
+	insertCampingCustomer[2] = "INSERT INTO CampingCustomer VALUES (3, '김남주', '서울 송파', '000-0000-0003', 'nj@gmail.com')";
+	insertCampingCustomer[3] = "INSERT INTO CampingCustomer VALUES (4, '송혜교', '서울 용산', '000-0000-0004', 'hg@gmail.com')";
+	insertCampingCustomer[4] = "INSERT INTO CampingCustomer VALUES (5, '한채영', '서울 양천', '000-0000-0005', 'cy@gmail.com')";
+	insertCampingCustomer[5] = "INSERT INTO CampingCustomer VALUES (6, '박중훈', '서울 마포', '000-0000-0006', 'jh@gmail.com')";
+	insertCampingCustomer[6] = "INSERT INTO CampingCustomer VALUES (7, '최지우', '서울 광진', '000-0000-0007', 'jw@gmail.com')";
+	insertCampingCustomer[7] = "INSERT INTO CampingCustomer VALUES (8, '장근석', '서울 성동', '000-0000-0008', 'gs@gmail.com')";
+	insertCampingCustomer[8] = "INSERT INTO CampingCustomer VALUES (9, '유재석', '서울 강동', '000-0000-0009', 'js@gmail.com')";
+	insertCampingCustomer[9] = "INSERT INTO CampingCustomer VALUES (10, '강호동', '서울 중구', '000-0000-0010', 'hd@gmail.com')";
+	insertCampingCustomer[10] = "INSERT INTO CampingCustomer VALUES (11, '김희애', '서울 영등포', '000-0000-0011', 'ha@gmail.com')";
+	insertCampingCustomer[11] = "INSERT INTO CampingCustomer VALUES (12, '이수만', '서울 동작', '000-0000-0012', 'sm@gmail.com')";
+	insertCampingCustomer[12] = "INSERT INTO CampingCustomer VALUES (13, '이승철', '서울 종로', '000-0000-0013', 'sc@gmail.com')";
+	insertCampingCustomer[13] = "INSERT INTO CampingCustomer VALUES (14, '이효리', '서울 강서', '000-0000-0014', 'hl@gmail.com')";
+	insertCampingCustomer[14] = "INSERT INTO CampingCustomer VALUES (15, '송승헌', '서울 관악', '000-0000-0015', 'sh@gmail.com')";
+	
+	insertCarcenterList[0] = "INSERT INTO CarcenterList Values (1,'세종정비소','서울 강남','000-0000-0011','managerA','sj@gmail.com')";
+	insertCarcenterList[1] = "INSERT INTO CarcenterList Values (2,'한양정비소','서울 서초','000-0000-0021','managerB','hy@gmail.com')";
+	insertCarcenterList[2] = "INSERT INTO CarcenterList Values (3,'건국정비소','서울 송파','000-0000-0031','managerC','gg@gmail.com')";
+	insertCarcenterList[3] = "INSERT INTO CarcenterList Values (4,'서강정비소','서울 용산','000-0000-0041','managerD','sg@gmail.com')";
+	insertCarcenterList[4] = "INSERT INTO CarcenterList Values (5,'성균관정비소','서울 용산','000-0000-0051','managerE','ssg@gmail.com')";
+	insertCarcenterList[5] = "INSERT INTO CarcenterList Values (6,'연세정비소','서울 서초','000-0000-0061','managerF','ys@gmail.com')";
+	insertCarcenterList[6] = "INSERT INTO CarcenterList Values (7,'고려정비소','서울 강남','000-0000-0071','managerG','kr@gmail.com')";
+	insertCarcenterList[7] = "INSERT INTO CarcenterList Values (8,'숭실정비소','서울 송파','000-0000-0081','managerH','ss@gmail.com')";
+	insertCarcenterList[8] = "INSERT INTO CarcenterList Values (9,'중앙정비소','서울 용산','000-0000-0091','managerI','ca@gmail.com')";
+	insertCarcenterList[9] = "INSERT INTO CarcenterList Values (10,'동국정비소','서울 송파','000-0000-0101','managerJ','dk@gmail.com')";
+	insertCarcenterList[10] = "INSERT INTO CarcenterList Values (11,'홍익정비소','서울 서초','000-0000-0201','managerK','hi@gmail.com')";
+	insertCarcenterList[11] = "INSERT INTO CarcenterList Values (12,'국민정비소','서울 용산','000-0000-0301','managerL','km@gmail.com')";
+	insertCarcenterList[12] = "INSERT INTO CarcenterList Values (13,'광운정비소','서울 송파','000-0000-0401','managerM','gw@gmail.com')";
+	insertCarcenterList[13] = "INSERT INTO CarcenterList Values (14,'서울정비소','서울 강남','000-0000-0501','managerN','sl@gmail.com')";
+	insertCarcenterList[14] = "INSERT INTO CarcenterList Values (15,'경희정비소','서울 강남','000-0000-0601','managerO','kh@gmail.com')";
+
+	
+	//for(i=0;i<5;i++)
+	//	stmt.executeUpdate(delete[i]);
+	for(i=0;i<15;i++)
+		stmt.executeUpdate(insertCompanyList[i]);
+	for(i=0;i<15;i++)
+		stmt.executeUpdate(insertCampingcarList[i]);
+	for(i=0;i<15;i++)
+		stmt.executeUpdate(insertCarcenterList[i]);
+	
+	}catch(SQLException e3)
+	{
+		System.out.println("쿼리초기화작업실패"+e3);
+	}
+   }
+   
+   
+   
+   
+   @Override
+   public void actionPerformed(ActionEvent e) { // 액션담당 함수
+    
+      try {
+         stmt = con.createStatement();
+         String query,orderid, custid,bookid,saleprice,orderdate;
+         if (e.getSource() == btnOk) { // btnOk를 눌렀을 때
+        	 orderid = txtField1.getText();
+        	 custid = txtField2.getText();
+        	 bookid = txtField3.getText();
+        	 saleprice = txtField4.getText();
+        	 orderdate = txtField5.getText();
+        	 
+        	 txtField1.setText("");
+        	 txtField2.setText("");
+        	 txtField3.setText("");
+        	 txtField4.setText("");
+        	 txtField5.setText("");
+        	 
+        	 stmt.executeUpdate("INSERT INTO Orders VALUES ("+orderid+","+custid+","+bookid+","+saleprice+","+ "STR_TO_DATE('"+orderdate+"','%Y-%m-%d'))");
+        	 txtResult.setText("Orders 테이블에 등록되었습니다!!");
+        	 
+            }
+         
+         else if (e.getSource() == btnReset) {// btnReset을 눌렀을 때
+            txtResult.setText("");//화면의 텍스트들을 지우는 역할인듯
+            createTable();
+            insertMydata();
+            txtResult.setText("데이터가 초기화 되었습니다!!");
+         }
+         
+         else if(e.getSource() == btnSearch1) {//검색1버튼을 눌렀을 때
+        	 query = "SELECT * FROM Book ";
+        	txtResult.setText("");
+        	txtResult.setText("BOOKID \t BOOK NAME \t PUBLISHER \t PRICE\n");
+        	rs = stmt.executeQuery(query);
+        	while (rs.next()) {
+                String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3) + "\t" + rs.getInt(4)
+                      + "\n";
+                txtResult.append(str);
+        						}
+         }
+         else if(e.getSource() == btnSearch2) {//검색2버튼을 눌렀을 때
+        	 query = "SELECT * FROM Orders";
+         	txtResult.setText("");
+         	txtResult.setText("ORDERID \t CUSTID \t BOOKID \t SALEPRICE \t ORDERDATE\n");
+         	rs = stmt.executeQuery(query);
+         	while (rs.next()) {
+                 String str = rs.getInt(1) + "\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5)
+                       + "\n";
+                 txtResult.append(str);
+         						}
+          }
+         else if(e.getSource() == btnSearch3) {//검색3버튼을 눌렀을 때
+        	 query = "SELECT * FROM Customer";
+         	txtResult.setText("");
+         	txtResult.setText("CUSTID \t NAME \t ADDRESS \t\t  PHONE\n");
+         	rs = stmt.executeQuery(query);
+         	while (rs.next()) {
+                 String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3) + "\t\t" + rs.getString(4)
+                       + "\n";
+                 txtResult.append(str);
+         						}
+          }
+         
+         
+      } catch (Exception e2) {
+         System.out.println("쿼리 읽기 실패 :" + e2);
+         txtResult.setText("오류 메세지 :" + e2);
+         
+/*      } finally {
+         try {
+            if (rs != null)
+               rs.close();
+            if (stmt != null)
+               stmt.close();
+            if (con != null)
+               con.close();
+         } catch (Exception e3) {
+            // TODO: handle exception
+         }
+  */
+      }
+
+   }
+
+   public static void main(String[] args) {
+      BookListSwing BLS = new BookListSwing();
+      
+      //BLS.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      //BLS.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      
+      BLS.addWindowListener(new WindowAdapter() {
+    	  public void windowClosing(WindowEvent we) {
+    		try {
+    			con.close();
+    		} catch (Exception e4) { 	}
+    		System.out.println("프로그램 완전 종료!");    		
+    	    System.exit(0);
+    	  }
+    	});
+   }
+}
+
