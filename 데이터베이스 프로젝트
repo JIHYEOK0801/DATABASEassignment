@@ -111,7 +111,7 @@ public class BookListSwing extends JFrame implements ActionListener {
    
    public void createTable() {//테이블 구현
 	  try { 
-	   String sql[] = new String[7];
+	   String sql[] = new String[8];
 	   StringBuilder sb = new StringBuilder();
 	   stmt = con.createStatement();
 	   
@@ -150,7 +150,7 @@ public class BookListSwing extends JFrame implements ActionListener {
 	   	stmt.execute(sql[2]);
 	   	sb.delete(0, sb.length());
 	   			
-	   	sql[3] = sb.append("create table AvailableCampingcarList(")//table4
+	   	sql[3] = sb.append("create table PresentRentCampingcarList(")//table4
 	   			.append("rentid INTEGER PRIMARY KEY,")//고유대여번호
 	   			.append("carID INTEGER,")//캠핑카등록ID
 	   			.append("licenseID INTEGER,")//운전면허증번호
@@ -203,6 +203,20 @@ public class BookListSwing extends JFrame implements ActionListener {
 	   	stmt.execute(sql[6]);
 	   	sb.delete(0,  sb.length());
 	   	
+	   	
+	   	sql[7] = sb.append("create table AvailableCampingcarlist(")//table2
+	               .append("carid INTEGER PRIMARY KEY,")//캠핑카등록ID
+	               .append("carname varchar(45),")//캠핑카 이름
+	               .append("carnumber INTEGER,")//캠핑카 차량번호
+	               .append("carmax INTEGER,")//캠핑카 인원수
+	               .append("carimage INTEGER,")//캠핑카이미지
+	               .append("cardetail varchar(45),")//캠핑카상세정보
+	               .append("rentprice INTEGER,")//캠핑카대여비용	      
+	               .append("companyid INTEGER")//캠핑카대여회사ID
+	               .append(");").toString();
+		   	stmt.execute(sql[7]);
+		   	sb.delete(0,sb.length());	   	
+	   	
 	  }catch(SQLException CreateError)
 		{
 			System.out.println("테이블초기화작업실패"+CreateError);
@@ -215,10 +229,11 @@ public class BookListSwing extends JFrame implements ActionListener {
 		String insertCompanyList[] = new String[15];
 		String insertCampingcarList[] = new String[15];
 		String insertCampingCustomer[] = new String[15];
-		String insertAvailableCampingcarList[] = new String[15];
+		String insertPresentRentCampingcarList[] = new String[15];
 		String insertCarCheck[] = new String[15];
 		String insertFixInformation[] = new String[15];
 		String insertCarcenterList[] = new String[15];
+		String insertAvailableCampingcarList[] = new String[15];
 		int i;
 	stmt = con.createStatement();
 	
@@ -293,7 +308,22 @@ public class BookListSwing extends JFrame implements ActionListener {
 	insertCarcenterList[12] = "INSERT INTO CarcenterList Values (13,'광운정비소','서울 송파','000-0000-0401','managerM','gw@gmail.com')";
 	insertCarcenterList[13] = "INSERT INTO CarcenterList Values (14,'서울정비소','서울 강남','000-0000-0501','managerN','sl@gmail.com')";
 	insertCarcenterList[14] = "INSERT INTO CarcenterList Values (15,'경희정비소','서울 강남','000-0000-0601','managerO','kh@gmail.com')";
-
+	
+	insertAvailableCampingcarList[0] = "INSERT INTO AvailableCampingcarList VALUES (1, 'QM3', 1111, 4, 1, 'NULL', 100000,2)";
+	insertAvailableCampingcarList[1] = "INSERT INTO AvailableCampingcarList VALUES (2, '엑센트 디젤',1112, 4, 1, 'NULL', 100000,5)";
+	insertAvailableCampingcarList[2] = "INSERT INTO AvailableCampingcarList VALUES (3, '쏘나타 ', 1113, 4, 1, 'NULL', 100000,2)";
+	insertAvailableCampingcarList[3] = "INSERT INTO AvailableCampingcarList VALUES (4, 'i30 디젤', 1114, 4, 1, 'NULL', 100000,2)";
+	insertAvailableCampingcarList[4] = "INSERT INTO AvailableCampingcarList VALUES (5, 'K5 하이브리드', 1115, 4, 1, 'NULL', 100000,4)";
+	insertAvailableCampingcarList[5] = "INSERT INTO AvailableCampingcarList VALUES (6, 'SM5 디젤', 1116, 6, 1, 'NULL', 100000,6)";
+	insertAvailableCampingcarList[6] = "INSERT INTO AvailableCampingcarList VALUES (7, '모닝 CVT', 1117, 6, 1, 'NULL', 120000,9)";
+	insertAvailableCampingcarList[7] = "INSERT INTO AvailableCampingcarList VALUES (8, 'K3 디젤', 1118, 6, 1, '생각보다작음', 120000,10)";
+	insertAvailableCampingcarList[8] = "INSERT INTO AvailableCampingcarList VALUES (9, '아반떼 디젤', 1119, 6, 1, 'NULL', 120000,11)";
+	insertAvailableCampingcarList[9] = "INSERT INTO AvailableCampingcarList VALUES (10, 'K7 하이브리드', 1120, 8, 1, 'NULL', 120000,15)";
+	insertAvailableCampingcarList[10] = "INSERT INTO AvailableCampingcarList VALUES (11, '그랜저 ', 1121, 8, 1, 'NULL', 120000,12)";
+	insertAvailableCampingcarList[11] = "INSERT INTO AvailableCampingcarList VALUES (12, '쉐보레 스파크', 1122, 8, 1, 'NULL', 120000,4)";
+	insertAvailableCampingcarList[12] = "INSERT INTO AvailableCampingcarList VALUES (13, '옵티머스프라임', 1123, 8, 1, '변신가능함', 140000,7)";
+	insertAvailableCampingcarList[13] = "INSERT INTO AvailableCampingcarList VALUES (14, '범블비', 1124, 10, 1, '변신가능함', 140000,8)";
+	insertAvailableCampingcarList[14] = "INSERT INTO AvailableCampingcarList VALUES (15, '벤츠', 1125, 12, 1, '외제차임', 990000,3)";
 	
 	for(i=0;i<5;i++)
 		stmt.executeUpdate(delete[i]);
@@ -305,6 +335,8 @@ public class BookListSwing extends JFrame implements ActionListener {
 		stmt.executeUpdate(insertCampingCustomer[i]);
 	for(i=0;i<15;i++)
 		stmt.executeUpdate(insertCarcenterList[i]);
+	for(i=0;i<15;i++)
+		stmt.executeUpdate(insertAvailableCampingcarList[i]);
 	
 	}catch(SQLException e3)
 	{
@@ -349,10 +381,10 @@ public class BookListSwing extends JFrame implements ActionListener {
          else if(e.getSource() == UbtnSearch1) {//검색1버튼을 눌렀을 때
         	 query = "SELECT * FROM campingcarlist ";
         	txtResult.setText("");
-        	txtResult.setText("CAR ID \t 캠핑카이름 \t 차량번호 \t 최대승차인원수  캠핑카이미지\t 차 상세정보\t 대여비용(1일)\t 회사ID\t 차량등록일자\t \n");
+        	txtResult.setText("차량 ID \t 캠핑카이름 \t 차량번호 \t 최대승차인원수  캠핑카이미지\t 차 상세정보\t 대여비용(1일)\t\n");
         	rs = stmt.executeQuery(query);
         	while (rs.next()) {
-                String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getInt(5) + "\t" + rs.getString(6) +"\t" + rs.getInt(7)+"\t" + rs.getInt(8)+"\t" + rs.getString(9)
+                String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getInt(5) + "\t" + rs.getString(6) +"\t" + rs.getInt(7) +"\t" + rs.getInt(8)
                       + "\n";
                 txtResult.append(str);
         						}
