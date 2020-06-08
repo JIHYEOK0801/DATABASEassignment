@@ -1,4 +1,3 @@
-
 import java.awt.event.*;
 import java.awt.*;
 //import java.awt.event.ActionListener;
@@ -12,7 +11,7 @@ import javax.swing.*;
 
 
 public class BookListSwing extends JFrame implements ActionListener {
-   JButton btnReset, btnSearch1, btnSearch2, btnSearch3, btnOk;
+   JButton btnReset, UbtnSearch1, btnSearch2, btnSearch3, btnOk;
    JTextArea txtResult;
    JTextField txtField1,txtField2,txtField3,txtField4,txtField5;
 
@@ -40,7 +39,7 @@ public class BookListSwing extends JFrame implements ActionListener {
    public void layInit() {
       btnOk = new JButton("입력1");
       btnReset = new JButton("초기화");
-      btnSearch1 = new JButton("검색1");
+      UbtnSearch1 = new JButton("대여가능한 캠핑카목록 검색");
       btnSearch2 = new JButton("검색2");
       btnSearch3 = new JButton("검색3");
       txtResult = new JTextArea();
@@ -55,7 +54,7 @@ public class BookListSwing extends JFrame implements ActionListener {
      
       pn1.add(btnOk);//입력1 버튼
       pn1.add(btnReset);//초기화버튼
-      pn1.add(btnSearch1);//검색 1버튼 
+      pn1.add(UbtnSearch1);//검색 1버튼 
       pn1.add(btnSearch2);//검색 2버튼
       pn1.add(btnSearch3);//검색 3버튼
       pn2.setLayout(new GridLayout(6,2));
@@ -82,7 +81,7 @@ public class BookListSwing extends JFrame implements ActionListener {
 
       btnOk.addActionListener(this);
       btnReset.addActionListener(this);
-      btnSearch1.addActionListener(this);
+      UbtnSearch1.addActionListener(this);
       btnSearch2.addActionListener(this);
       btnSearch3.addActionListener(this);
       txtField1.addActionListener(this);
@@ -212,7 +211,7 @@ public class BookListSwing extends JFrame implements ActionListener {
    }
    public void insertMydata() { //초기화 할때 쓰임
 	try{
-		String delete[] = new String[5];
+		String delete[] = new String[6];
 		String insertCompanyList[] = new String[15];
 		String insertCampingcarList[] = new String[15];
 		String insertCampingCustomer[] = new String[15];
@@ -224,10 +223,11 @@ public class BookListSwing extends JFrame implements ActionListener {
 	stmt = con.createStatement();
 	
 	delete[0] = "SET foreign_key_checks =0;";
-	delete[1] = "delete from Book ;";
-	delete[2] = "delete from Customer ;";
-	delete[3] = "delete from Orders ;";
-	delete[4] = "SET foreign_key_checks =1;";
+	delete[1] = "delete from CompanyList ;";
+	delete[2] = "delete from CampingcarList ;";
+	delete[3] = "delete from CampingCustomer ;";
+	delete[4] = "delete from CarcenterList ;";
+	delete[5] = "SET foreign_key_checks =1;";
 	
 	insertCompanyList[0] = "INSERT INTO CompanyList Values (1,'삼성','서울 강남','000-0000-0001','메시','messi@gmail.com')";
 	insertCompanyList[1] = "INSERT INTO CompanyList Values (2,'LG','서울 서초','000-0000-0002','네이마르','neymar@gmail.com')";
@@ -248,7 +248,7 @@ public class BookListSwing extends JFrame implements ActionListener {
 	
 	insertCampingcarList[0] = "INSERT INTO CampingcarList VALUES (1, 'QM3', 1111, 4, 1, 'NULL', 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	insertCampingcarList[1] = "INSERT INTO CampingcarList VALUES (2, '엑센트 디젤',1112, 4, 1, 'NULL', 100000, 5, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[2] = "INSERT INTO CampingcarList VALUES (3, '쏘나타 하이브리드', 1113, 4, 1, 'NULL', 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[2] = "INSERT INTO CampingcarList VALUES (3, '쏘나타 ', 1113, 4, 1, 'NULL', 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	insertCampingcarList[3] = "INSERT INTO CampingcarList VALUES (4, 'i30 디젤', 1114, 4, 1, 'NULL', 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	insertCampingcarList[4] = "INSERT INTO CampingcarList VALUES (5, 'K5 하이브리드', 1115, 4, 1, 'NULL', 100000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	insertCampingcarList[5] = "INSERT INTO CampingcarList VALUES (6, 'SM5 디젤', 1116, 6, 1, 'NULL', 100000, 6, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
@@ -256,7 +256,7 @@ public class BookListSwing extends JFrame implements ActionListener {
 	insertCampingcarList[7] = "INSERT INTO CampingcarList VALUES (8, 'K3 디젤', 1118, 6, 1, '생각보다작음', 120000, 10, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	insertCampingcarList[8] = "INSERT INTO CampingcarList VALUES (9, '아반떼 디젤', 1119, 6, 1, 'NULL', 120000, 11, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	insertCampingcarList[9] = "INSERT INTO CampingcarList VALUES (10, 'K7 하이브리드', 1120, 8, 1, 'NULL', 120000, 15, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
-	insertCampingcarList[10] = "INSERT INTO CampingcarList VALUES (11, '그랜저 하이브리드', 1121, 8, 1, 'NULL', 120000, 12, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertCampingcarList[10] = "INSERT INTO CampingcarList VALUES (11, '그랜저 ', 1121, 8, 1, 'NULL', 120000, 12, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	insertCampingcarList[11] = "INSERT INTO CampingcarList VALUES (12, '쉐보레 스파크', 1122, 8, 1, 'NULL', 120000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	insertCampingcarList[12] = "INSERT INTO CampingcarList VALUES (13, '옵티머스프라임', 1123, 8, 1, '변신가능함', 140000, 7, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	insertCampingcarList[13] = "INSERT INTO CampingcarList VALUES (14, '범블비', 1124, 10, 1, '변신가능함', 140000, 8, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
@@ -295,12 +295,14 @@ public class BookListSwing extends JFrame implements ActionListener {
 	insertCarcenterList[14] = "INSERT INTO CarcenterList Values (15,'경희정비소','서울 강남','000-0000-0601','managerO','kh@gmail.com')";
 
 	
-	//for(i=0;i<5;i++)
-	//	stmt.executeUpdate(delete[i]);
+	for(i=0;i<5;i++)
+		stmt.executeUpdate(delete[i]);
 	for(i=0;i<15;i++)
 		stmt.executeUpdate(insertCompanyList[i]);
 	for(i=0;i<15;i++)
 		stmt.executeUpdate(insertCampingcarList[i]);
+	for(i=0;i<15;i++)
+		stmt.executeUpdate(insertCampingCustomer[i]);
 	for(i=0;i<15;i++)
 		stmt.executeUpdate(insertCarcenterList[i]);
 	
@@ -344,13 +346,13 @@ public class BookListSwing extends JFrame implements ActionListener {
             txtResult.setText("데이터가 초기화 되었습니다!!");
          }
          
-         else if(e.getSource() == btnSearch1) {//검색1버튼을 눌렀을 때
-        	 query = "SELECT * FROM Book ";
+         else if(e.getSource() == UbtnSearch1) {//검색1버튼을 눌렀을 때
+        	 query = "SELECT * FROM campingcarlist ";
         	txtResult.setText("");
-        	txtResult.setText("BOOKID \t BOOK NAME \t PUBLISHER \t PRICE\n");
+        	txtResult.setText("CAR ID \t 캠핑카이름 \t 차량번호 \t 최대승차인원수  캠핑카이미지\t 차 상세정보\t 대여비용(1일)\t 회사ID\t 차량등록일자\t \n");
         	rs = stmt.executeQuery(query);
         	while (rs.next()) {
-                String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3) + "\t" + rs.getInt(4)
+                String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getInt(5) + "\t" + rs.getString(6) +"\t" + rs.getInt(7)+"\t" + rs.getInt(8)+"\t" + rs.getString(9)
                       + "\n";
                 txtResult.append(str);
         						}
@@ -416,4 +418,3 @@ public class BookListSwing extends JFrame implements ActionListener {
     	});
    }
 }
-
