@@ -115,6 +115,9 @@ public class BookListSwing extends JFrame implements ActionListener {
 	   StringBuilder sb = new StringBuilder();
 	   stmt = con.createStatement();
 	   
+	   stmt.execute("drop table if exists companylist,campingcarlist,campingcustomer,presentrentcampingcarlist,carcheck,fixinformation,carcenterlist,availablecampingcarlist");
+	   
+	   
 	   sql[0] = sb.append("create table Companylist(")//table1
                .append("companyid INTEGER PRIMARY KEY,")//캠핑카대여회사ID
                .append("companyname varchar(45),")//회사명
