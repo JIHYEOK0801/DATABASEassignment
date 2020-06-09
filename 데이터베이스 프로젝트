@@ -32,7 +32,7 @@ public class BookListSwing extends JFrame implements ActionListener {
       layInit();
       conDB();
       setVisible(true);
-      setBounds(100, 30, 1500, 1000); //가로위치,세로위치,가로길이,세로길이
+      setBounds(100, 30, 1600, 1000); //가로위치,세로위치,가로길이,세로길이
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    }
 
@@ -58,7 +58,7 @@ public class BookListSwing extends JFrame implements ActionListener {
       
       //pn1.add(new JLabel("일반사용자용"));
       //pn1.add(btnOk);//입력1 버튼
-      //pn1.add(btnReset);//초기화버튼
+      pn1.add(btnReset);//초기화버튼
       //pn1.add(UbtnSearch1);//검색 1버튼 
       //pn1.add(btnSearch2);//검색 2버튼
       //pn1.add(btnSearch3);//검색 3버튼
@@ -73,7 +73,7 @@ public class BookListSwing extends JFrame implements ActionListener {
       pn2.add(txtField2);
       pn2.add(new JLabel("대여시작일을 입력해주세요(YYYY-MM-DD):"));
       pn2.add(txtField3);
-      pn2.add(new JLabel("대여기간을 입력해주세요 :"));
+      pn2.add(new JLabel("대여기간을 입력해주세요 (일):"));
       pn2.add(txtField4);
       //pn2.add(new JLabel("ORDERDATE :                                      ex) YYYY-MM-DD "));
       //pn2.add(txtField5);
@@ -83,14 +83,14 @@ public class BookListSwing extends JFrame implements ActionListener {
 
       txtResult.setEditable(false);
       
-      GridLayout grid = new GridLayout(2,2,5,5);
+      GridLayout grid = new GridLayout(3,2,5,5);
       Container c = getContentPane();
       c.setLayout(grid);
       
       JScrollPane scrollPane = new JScrollPane(txtResult);
       JScrollPane scrollPane2 = new JScrollPane(txtResult2);
 
-      //c.add(pn1);c.add(pn3);
+      c.add(pn1);c.add(pn3);
       c.add(scrollPane);c.add(scrollPane2);
       c.add(pn2);c.add(pn4);
 
@@ -124,7 +124,7 @@ public class BookListSwing extends JFrame implements ActionListener {
    }
    
    
-   public void createTable() {//테이블 구현
+   public void createTable() {//테이블 구현 Companylist,Campingcarlist,CampingCustomer,PresentRentCampingcarList,CarCheck,FixInformation,CarcenterList,AvailableCampingcarlist
 	  try { 
 	   String sql[] = new String[8];
 	   StringBuilder sb = new StringBuilder();
@@ -369,22 +369,34 @@ public class BookListSwing extends JFrame implements ActionListener {
     
       try {
          stmt = con.createStatement();
-         String query,orderid, custid,bookid,saleprice,orderdate;
+         String query;
+         int rentid=0;
          if (e.getSource() == btnOk) { // btnOk를 눌렀을 때
-        	 orderid = txtField1.getText();
-        	 custid = txtField2.getText();
-        	 bookid = txtField3.getText();
-        	 saleprice = txtField4.getText();
-        	 orderdate = txtField5.getText();
+        	 String licenseid, carid,startdate,rentdays;
+        	 int rentprice,companyid; 
+        	 licenseid = txtField1.getText();
+        	 carid = txtField2.getText();
+        	 startdate = txtField3.getText();
+        	 rentdays = txtField4.getText();
         	 
         	 txtField1.setText("");
         	 txtField2.setText("");
         	 txtField3.setText("");
         	 txtField4.setText("");
-        	 txtField5.setText("");
         	 
-        	 stmt.executeUpdate("INSERT INTO Orders VALUES ("+orderid+","+custid+","+bookid+","+saleprice+","+ "STR_TO_DATE('"+orderdate+"','%Y-%m-%d'))");
-        	 txtResult.setText("Orders 테이블에 등록되었습니다!!");
+        	 query = "select * from Campingcarlist where carid="+carid;
+        	 
+        	 rs = stmt.executeQuery(query);
+        	 	
+        	 while(rs.next()) {
+        		  companyid = rs.getInt(9);
+        		  rentprice = rs.getInt(8);
+        		  stmt.executeUpdate("INSERT INTO PresentRentCampingcarList VALUES ("+rentid+","+carid+","+licenseid+","+companyid+","+ "STR_TO_DATE('"+startdate+"','%Y-%m-%d'),STR_TO_DATE('"+startdate+"','%Y-%m-%d')-1+"+rentdays+","+rentprice+"*"+rentdays+",NULL,NULL,NULL)");
+        		  rentid=(rentid+1)%15;
+        	 }
+        	 
+        	 
+        	 txtResult.setText("렌트신청 되었습니다!!");
         	 
             }
          
@@ -465,5 +477,20 @@ public class BookListSwing extends JFrame implements ActionListener {
     	    System.exit(0);
     	  }
     	});
+  
    }
 }
+
+/*
+ * connection coon = null;
+ * PreparedStatement pstmt = null;
+ * ResultSet rs = null;
+ * 
+ * String mallmanage_url = "";
+ * String mallmanage_id = "";
+ * String mallmanage_pwd ="";
+ * 
+ * pstmt = conn.prepareStatement(SQL);
+ * pstmt.setString(1,"auction_order_inquiry");
+ * 
+  */
