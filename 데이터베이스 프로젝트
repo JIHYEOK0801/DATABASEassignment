@@ -9,14 +9,222 @@ import javax.swing.*;
 //import javax.swing.JScrollPane;
 //import javax.swing.JTextArea;
 
-
+class MyModalDialog extends JDialog{
+	private JTextField tfselect = new JTextField("");
+	private JTextField tf1 = new JTextField("");
+	private JTextField tf2 = new JTextField("");
+	private JTextField tf3 = new JTextField("");
+	private JTextField tf4 = new JTextField("");
+	private JTextField tf5 = new JTextField("");
+	private JTextField tf6 = new JTextField("");
+	private JTextField tf7 = new JTextField("");
+	private JTextField tf8 = new JTextField("");
+	private JTextField tf9 = new JTextField("");
+	private JTextField tf10 = new JTextField("");
+	
+	private JButton okButton = new JButton("테이블선택");
+	private JButton insertButton = new JButton("입력");
+	
+	private JLabel labelselect = new JLabel("어떤 테이블에 입력할지 고르고 테이블선택 버튼을 눌러주세요.");
+	private JLabel labelselect2 = new JLabel(" 1.대여회사/2.캠핑카/3.고객/4.정비소/5.정비정보");
+	private JLabel label1 = new JLabel("데이터1 :");
+	private JLabel label2 = new JLabel("데이터2 :");
+	private JLabel label3 = new JLabel("데이터3 :");
+	private JLabel label4 = new JLabel("데이터4 :");
+	private JLabel label5 = new JLabel("데이터5 :");
+	private JLabel label6 = new JLabel("데이터6 :");
+	private JLabel label7 = new JLabel("데이터7 :");
+	private JLabel label8 = new JLabel("데이터8 :");
+	private JLabel label9 = new JLabel("데이터9 :");
+	private JLabel label10 = new JLabel("데이터10 :");
+	
+	public MyModalDialog(JFrame frame, String title) {
+		super(frame,title,true);
+		setLayout(new GridLayout(13,2,5,5));
+		add(labelselect);	add(labelselect2);
+		add(tfselect);		add(okButton);
+		add(label1);		add(tf1);
+		add(label2);		add(tf2);
+		add(label3);		add(tf3);
+		add(label4);		add(tf4);
+		add(label5);		add(tf5);
+		add(label6);		add(tf6);
+		add(label7);		add(tf7);
+		add(label8);		add(tf8);
+		add(label9);		add(tf9);
+		add(label10);		add(tf10);
+		add(new JLabel("입력버튼을 누르세요.")); add(insertButton);
+		setSize(800,800);
+		
+		okButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				String tablenumber = tfselect.getText();
+				System.out.println(tablenumber);
+				if(tablenumber.compareTo("1")==0)
+				{
+					label1.setText("캠핑카대여회사ID :");//companyid
+					label2.setText("회사명 :");//companyname
+					label3.setText("주소 :");//companyaddress
+					label4.setText("전화번호 :");//companyphone
+					label5.setText("담당자 이름 :");//managername
+					label6.setText("담당자 이메일 :");//managermail
+					label7.setText("기입 X");
+					label8.setText("기입 X");
+					label9.setText("기입 X");
+					label10.setText("기입 X");
+				}
+				else if(tablenumber.compareTo("2")==0)
+				{
+					label1.setText("캠핑카등록ID :");//carid
+					label2.setText("캠핑카이름 :");//carname
+					label3.setText("캠핑카 차량번호 :");//carnumber
+					label4.setText("챔핑카승차 인원수 :");//carmax
+					label5.setText("제조회사 :");//carbrand
+					label6.setText("제조연도(YYYY-MM-DD) :");//birthday
+					label7.setText("누적주행거리 :");//distance
+					label8.setText("캠핑카대여비용 :");//rentprice
+					label9.setText("캠핑카대여회사ID :");//companyid
+					label10.setText("캠핑카등록일자(YYYY-MM-DD) :");//enrolldate
+				}
+				else if(tablenumber.compareTo("3")==0)
+				{
+					label1.setText("운전면허증번호 :");//licenseid
+					label2.setText("고객명 :");//customername
+					label3.setText("고객주소 :");//customeraddress
+					label4.setText("고객전화번호 :");//customerphone
+					label5.setText("고객이메일정보 :");//customermail
+					label6.setText("기입 X");
+					label7.setText("기입 X");
+					label8.setText("기입 X");
+					label9.setText("기입 X");
+					label10.setText("기입 X");
+				}
+				else if(tablenumber.compareTo("4")==0)
+				{
+					label1.setText("정비소ID :");//carcenterid
+					label2.setText("정비소명 :");//carcentername
+					label3.setText("정비소주소 :");//carcenteraddress
+					label4.setText("정비소전화번호 :");//carcenterphone
+					label5.setText("담당자이름 :");//centermanagername
+					label6.setText("이메일 정보");//centermanageremail
+					label7.setText("기입 X");
+					label8.setText("기입 X");
+					label9.setText("기입 X");
+					label10.setText("기입 X");
+				}
+				else if(tablenumber.compareTo("5")==0)
+				{
+					label1.setText("고유정비번호 :");//fixid
+					label2.setText("캠핑카등록ID :");//carid
+					label3.setText("캠핑카정비소ID :");//carcenterid
+					label4.setText("캠핑카대여회사ID :");//companyid
+					label5.setText("고객 운전면허증번호 :");//licenseid
+					label6.setText("정비 내역 :");//fix
+					label7.setText("수리 날짜(YYYY-MM-DD) :");//fixdate
+					label8.setText("수리 비용 :");//fixprice
+					label9.setText("납입 기한(YYYY-MM-DD) :");//depositdate
+					label10.setText("기타정비내역 :");//etcfix
+				}
+				else
+				{
+					label1.setText("데이터1 :");
+					label2.setText("데이터2 :");
+					label3.setText("데이터3 :");
+					label4.setText("데이터4 :");
+					label5.setText("데이터5 :");
+					label6.setText("데이터6 :");
+					label7.setText("데이터7 :");
+					label8.setText("데이터8 :");
+					label9.setText("데이터9 :");
+					label10.setText("데이터10 :");
+				}
+			}});
+		
+		insertButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				
+				
+			}});
+	}
+	void resetString() {
+		label1.setText("데이터1 :");
+		label2.setText("데이터2 :");
+		label3.setText("데이터3 :");
+		label4.setText("데이터4 :");
+		label5.setText("데이터5 :");
+		label6.setText("데이터6 :");
+		label7.setText("데이터7 :");
+		label8.setText("데이터8 :");
+		label9.setText("데이터9 :");
+		label10.setText("데이터10 :");
+		tfselect.setText("");
+		tf1.setText("");
+		tf2.setText("");
+		tf3.setText("");
+		tf4.setText("");
+		tf5.setText("");
+		tf6.setText("");
+		tf7.setText("");
+		tf8.setText("");
+		tf9.setText("");
+		tf10.setText("");
+	}
+	String getInputSelect() {
+		if(tfselect.getText().length()==0) return null;
+		else return tfselect.getText();
+	}
+	String getInput1() {
+		if(tf1.getText().length()==0) return null;
+		else return tf1.getText();
+	}
+	String getInput2() {
+		if(tf2.getText().length()==0) return null;
+		else return tf2.getText();
+	}
+	String getInput3() {
+		if(tf3.getText().length()==0) return null;
+		else return tf3.getText();
+	}
+	String getInput4() {
+		if(tf4.getText().length()==0) return null;
+		else return tf4.getText();
+	}
+	String getInput5() {
+		if(tf5.getText().length()==0) return null;
+		else return tf5.getText();
+	}
+	String getInput6() {
+		if(tf6.getText().length()==0) return null;
+		else return tf6.getText();
+	}
+	String getInput7() {
+		if(tf7.getText().length()==0) return null;
+		else return tf7.getText();
+	}
+	String getInput8() {
+		if(tf8.getText().length()==0) return null;
+		else return tf8.getText();
+	}
+	String getInput9() {
+		if(tf9.getText().length()==0) return null;
+		else return tf9.getText();
+	}
+	String getInput10() {
+		if(tf10.getText().length()==0) return null;
+		else return tf10.getText();
+	}
+	
+}
 public class BookListSwing extends JFrame implements ActionListener {
-   JButton btnReset, UbtnSearch1, btnSearch2, btnSearch3, btnOk;
+   JButton btnReset, UbtnSearch1, btnSearch2, btnSearch3, btnRent;
    JTextArea txtResult,txtResult2;
    JTextField txtField1,txtField2,txtField3,txtField4,txtField5;
-
+   
    JPanel pn1,pn2,pn3,pn4;
 
+   private MyModalDialog dialog;//
+   
    static Connection con;
    Statement stmt;
    ResultSet rs;
@@ -24,7 +232,8 @@ public class BookListSwing extends JFrame implements ActionListener {
    String url = "jdbc:mysql://localhost:3306/madang?&serverTimezone=Asia/Seoul&useSSL=false";
    String userid = "madang";
    String pwd = "madang";
-
+   int rentid=0;
+   
    
     
    public BookListSwing() {
@@ -34,15 +243,19 @@ public class BookListSwing extends JFrame implements ActionListener {
       setVisible(true);
       setBounds(100, 30, 1600, 1000); //가로위치,세로위치,가로길이,세로길이
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      
+      dialog=new MyModalDialog(this,"입력창");
+      
    }
 
    public void layInit() {
-      btnOk = new JButton("신청");
+      btnRent = new JButton("신청");
       btnReset = new JButton("초기화");
       UbtnSearch1 = new JButton("대여가능한 캠핑카목록 검색");
       btnSearch2 = new JButton("검색2");
       btnSearch3 = new JButton("검색3");
       txtResult = new JTextArea();
+      txtResult2 = new JTextArea();
       txtField1 = new JTextField("");
       txtField2 = new JTextField("");
       txtField3 = new JTextField("");
@@ -53,48 +266,44 @@ public class BookListSwing extends JFrame implements ActionListener {
       pn2 = new JPanel();
       pn3 = new JPanel();
       pn4 = new JPanel();
+    
      
-      //pn1.setLayout(new FlowLayout());
       
-      //pn1.add(new JLabel("일반사용자용"));
-      //pn1.add(btnOk);//입력1 버튼
-      pn1.add(btnReset);//초기화버튼
-      //pn1.add(UbtnSearch1);//검색 1버튼 
-      //pn1.add(btnSearch2);//검색 2버튼
-      //pn1.add(btnSearch3);//검색 3버튼
+      
       
       pn2.setLayout(new GridLayout(6,2));
+      	pn2.add(new JLabel("일반사용자 버전입니다.버튼을 눌러 대여가능한 차량을 검색하세요"));
+      	pn2.add(UbtnSearch1);
+      	pn2.add(new JLabel("본인의 운전면허증번호를 입력해주세요(LICENSE ID)"));
+      	pn2.add(txtField1);
+      	pn2.add(new JLabel("사용하시고 싶은 차량ID를 입력해주세요."));
+      	pn2.add(txtField2);
+      	pn2.add(new JLabel("대여시작일을 입력해주세요(YYYY-MM-DD):"));
+      	pn2.add(txtField3);
+      	pn2.add(new JLabel("대여기간을 입력해주세요 (일):"));
+      	pn2.add(txtField4);
+      	pn2.add(new JLabel("대여를 신청하려면 버튼을 누르세요"));
+      	pn2.add(btnRent);
       
-      pn2.add(new JLabel("일반사용자 버전입니다.버튼을 눌러 대여가능한 차량을 검색하세요"));
-      pn2.add(UbtnSearch1);
-      pn2.add(new JLabel("본인의 운전면허증번호를 입력해주세요(LICENSE ID)"));
-      pn2.add(txtField1);
-      pn2.add(new JLabel("사용하시고 싶은 차량ID를 입력해주세요."));
-      pn2.add(txtField2);
-      pn2.add(new JLabel("대여시작일을 입력해주세요(YYYY-MM-DD):"));
-      pn2.add(txtField3);
-      pn2.add(new JLabel("대여기간을 입력해주세요 (일):"));
-      pn2.add(txtField4);
-      //pn2.add(new JLabel("ORDERDATE :                                      ex) YYYY-MM-DD "));
-      //pn2.add(txtField5);
-      pn2.add(new JLabel("대여를 신청하려면 버튼을 누르세요"));
-      pn2.add(btnOk);
+ 
+      pn4.add(btnReset);//초기화버튼
+      pn4.add(btnSearch2);
       
-
       txtResult.setEditable(false);
       
-      GridLayout grid = new GridLayout(3,2,5,5);
+      GridLayout grid = new GridLayout(2,2,5,5);
       Container c = getContentPane();
       c.setLayout(grid);
       
       JScrollPane scrollPane = new JScrollPane(txtResult);
       JScrollPane scrollPane2 = new JScrollPane(txtResult2);
 
-      c.add(pn1);c.add(pn3);
+      //c.add(pn1);c.add(pn3);
       c.add(scrollPane);c.add(scrollPane2);
       c.add(pn2);c.add(pn4);
+      
 
-      btnOk.addActionListener(this);
+      btnRent.addActionListener(this);
       btnReset.addActionListener(this);
       UbtnSearch1.addActionListener(this);
       btnSearch2.addActionListener(this);
@@ -185,7 +394,7 @@ public class BookListSwing extends JFrame implements ActionListener {
 	   	sb.delete(0,  sb.length());
 	   			
 	   	sql[4] = sb.append("create table CarCheck(")//table5
-	   			.append("rentID INTEGER,")//고유대여번호
+	   			.append("rentID INTEGER PRIMARY KEY,")//고유대여번호
 	   			.append("carID INTEGER,")//캠핑카등록ID
 	   			.append("frontdescription varchar(45),")//앞부분설명
 	   			.append("leftdescription INTEGER,")//왼쪽설명
@@ -197,7 +406,7 @@ public class BookListSwing extends JFrame implements ActionListener {
 	   	sb.delete(0,  sb.length());
 	   			
 	   	sql[5] = sb.append("create table FixInformation(")//table6
-	   			.append("fixid INTEGER,")//고유정비번호
+	   			.append("fixid INTEGER PRIMARY KEY,")//고유정비번호
 	   			.append("carid INTEGER,")//캠핑카등록ID
 	   			.append("carcenterid INTEGER,")//캠핑카정비소ID
 	   			.append("companyid INTEGER,")//캠핑카대여회사ID
@@ -212,7 +421,7 @@ public class BookListSwing extends JFrame implements ActionListener {
 	   	sb.delete(0,  sb.length());
 	   	
 	   	sql[6] = sb.append("create table CarcenterList(")//table7
-	   			.append("carcenterid INTEGER,")//캠핑카정비소ID
+	   			.append("carcenterid INTEGER PRIMARY KEY,")//캠핑카정비소ID
 	   			.append("carcentername varchar(45),")//정비소명
 	   			.append("carcenteraddress varchar(45),")//정비소주소
 	   			.append("carcenterphone varchar(45),")//정비소전화번호
@@ -223,7 +432,7 @@ public class BookListSwing extends JFrame implements ActionListener {
 	   	sb.delete(0,  sb.length());
 	   	
 	   	
-	   	sql[7] = sb.append("create table AvailableCampingcarlist(")//table2
+	   	sql[7] = sb.append("create table AvailableCampingcarlist(")//table8
 	   			.append("carid INTEGER PRIMARY KEY,")//캠핑카등록ID
 	               .append("carname varchar(45),")//캠핑카 이름
 	               .append("carnumber INTEGER,")//캠핑카 차량번호
@@ -232,7 +441,8 @@ public class BookListSwing extends JFrame implements ActionListener {
 	               .append("birthday DATE,")//제조연도
 	               .append("distance INTEGER,")//누적주행거리
 	               .append("rentprice INTEGER,")//캠핑카대여비용
-	               .append("companyid INTEGER")//캠핑카대여회사ID
+	               .append("companyid INTEGER,")//캠핑카대여회사ID
+	               .append("enrolldate DATE")//캠핑카등록일자
 	               .append(");").toString();
 		   	stmt.execute(sql[7]);
 		   	sb.delete(0,sb.length());	   	
@@ -326,21 +536,21 @@ public class BookListSwing extends JFrame implements ActionListener {
 	insertCarcenterList[13] = "INSERT INTO CarcenterList Values (14,'서울정비소','서울 강남','000-0000-0501','managerN','sl@gmail.com')";
 	insertCarcenterList[14] = "INSERT INTO CarcenterList Values (15,'경희정비소','서울 강남','000-0000-0601','managerO','kh@gmail.com')";
 	
-	insertAvailableCampingcarList[0] = "INSERT INTO AvailableCampingcarlist VALUES (1, 'QM3', 1111, 4, '삼성', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2)";
-	insertAvailableCampingcarList[1] = "INSERT INTO AvailableCampingcarlist VALUES (2, '엑센트 디젤',1112, 4, '현대', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 5)";
-	insertAvailableCampingcarList[2] = "INSERT INTO AvailableCampingcarlist VALUES (3, '쏘나타 ', 1113, 4, '현대', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2)";
-	insertAvailableCampingcarList[3] = "INSERT INTO AvailableCampingcarlist VALUES (4, 'i30 디젤', 1114, 4, '현대', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2)";
-	insertAvailableCampingcarList[4] = "INSERT INTO AvailableCampingcarlist VALUES (5, 'K5 하이브리드', 1115, 4, '기아', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 4)";
-	insertAvailableCampingcarList[5] = "INSERT INTO AvailableCampingcarlist VALUES (6, 'SM5 디젤', 1116, 6, '삼성', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 6)";
-	insertAvailableCampingcarList[6] = "INSERT INTO AvailableCampingcarlist VALUES (7, '모닝 CVT', 1117, 6, '기아', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 9)";
-	insertAvailableCampingcarList[7] = "INSERT INTO AvailableCampingcarlist VALUES (8, 'K3 디젤', 1118, 6, '기아', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 10)";
-	insertAvailableCampingcarList[8] = "INSERT INTO AvailableCampingcarlist VALUES (9, '아반떼 디젤', 1119, 6, '현대', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 11)";
-	insertAvailableCampingcarList[9] = "INSERT INTO AvailableCampingcarlist VALUES (10, 'K7 하이브리드', 1120, 8, '기아', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 15)";
-	insertAvailableCampingcarList[10] = "INSERT INTO AvailableCampingcarlist VALUES (11, '그랜저 ', 1121, 8, '현대', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 12)";
-	insertAvailableCampingcarList[11] = "INSERT INTO AvailableCampingcarlist VALUES (12, '쉐보레 스파크', 1122, 8, 'GM', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 4)";
-	insertAvailableCampingcarList[12] = "INSERT INTO AvailableCampingcarlist VALUES (13, '옵티머스프라임', 1123, 8, '오토봇', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 7)";
-	insertAvailableCampingcarList[13] = "INSERT INTO AvailableCampingcarlist VALUES (14, '범블비', 1124, 10, '오토봇', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 8)";
-	insertAvailableCampingcarList[14] = "INSERT INTO AvailableCampingcarlist VALUES (15, '벤츠', 1125, 12, '벤츠', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 990000, 3)";
+	insertAvailableCampingcarList[0] = "INSERT INTO AvailableCampingcarList VALUES (1, 'QM3', 1111, 4, '삼성', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[1] = "INSERT INTO AvailableCampingcarList VALUES (2, '엑센트 디젤',1112, 4, '현대', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 5, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[2] = "INSERT INTO AvailableCampingcarList VALUES (3, '쏘나타 ', 1113, 4, '현대', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[3] = "INSERT INTO AvailableCampingcarList VALUES (4, 'i30 디젤', 1114, 4, '현대', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 2, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[4] = "INSERT INTO AvailableCampingcarList VALUES (5, 'K5 하이브리드', 1115, 4, '기아', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[5] = "INSERT INTO AvailableCampingcarList VALUES (6, 'SM5 디젤', 1116, 6, '삼성', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 100000, 6, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[6] = "INSERT INTO AvailableCampingcarList VALUES (7, '모닝 CVT', 1117, 6, '기아', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 9, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[7] = "INSERT INTO AvailableCampingcarList VALUES (8, 'K3 디젤', 1118, 6, '기아', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 10, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[8] = "INSERT INTO AvailableCampingcarList VALUES (9, '아반떼 디젤', 1119, 6, '현대', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 11, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[9] = "INSERT INTO AvailableCampingcarList VALUES (10, 'K7 하이브리드', 1120, 8, '기아', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 15, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[10] = "INSERT INTO AvailableCampingcarList VALUES (11, '그랜저 ', 1121, 8, '현대', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 12, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[11] = "INSERT INTO AvailableCampingcarList VALUES (12, '쉐보레 스파크', 1122, 8, 'GM', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 120000, 4, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[12] = "INSERT INTO AvailableCampingcarList VALUES (13, '옵티머스프라임', 1123, 8, '오토봇', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 7, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[13] = "INSERT INTO AvailableCampingcarList VALUES (14, '범블비', 1124, 10, '오토봇', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 140000, 8, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
+	insertAvailableCampingcarList[14] = "INSERT INTO AvailableCampingcarList VALUES (15, '벤츠', 1125, 12, '벤츠', STR_TO_DATE('2000-07-13','%Y-%m-%d'), 100, 990000, 3, STR_TO_DATE('2014-07-13','%Y-%m-%d'))";
 	
 	for(i=0;i<5;i++)
 		stmt.executeUpdate(delete[i]);
@@ -367,13 +577,13 @@ public class BookListSwing extends JFrame implements ActionListener {
    @Override
    public void actionPerformed(ActionEvent e) { // 액션담당 함수
     
-      try {
+      try {//일반 사용자용 에러검출
          stmt = con.createStatement();
          String query;
-         int rentid=0;
-         if (e.getSource() == btnOk) { // btnOk를 눌렀을 때
+         
+         if (e.getSource() == btnRent) { // btnRent를 눌렀을 때
         	 String licenseid, carid,startdate,rentdays;
-        	 int rentprice,companyid; 
+        	 int rentprice=0,companyid=0; 
         	 licenseid = txtField1.getText();
         	 carid = txtField2.getText();
         	 startdate = txtField3.getText();
@@ -391,21 +601,15 @@ public class BookListSwing extends JFrame implements ActionListener {
         	 while(rs.next()) {
         		  companyid = rs.getInt(9);
         		  rentprice = rs.getInt(8);
-        		  stmt.executeUpdate("INSERT INTO PresentRentCampingcarList VALUES ("+rentid+","+carid+","+licenseid+","+companyid+","+ "STR_TO_DATE('"+startdate+"','%Y-%m-%d'),STR_TO_DATE('"+startdate+"','%Y-%m-%d')-1+"+rentdays+","+rentprice+"*"+rentdays+",NULL,NULL,NULL)");
-        		  rentid=(rentid+1)%15;
         	 }
-        	 
-        	 
-        	 txtResult.setText("렌트신청 되었습니다!!");
+        	 stmt.executeUpdate("INSERT INTO PresentRentCampingcarList VALUES ("+rentid+","+carid+","+licenseid+","+companyid+","+ "STR_TO_DATE('"+startdate+"','%Y-%m-%d'),STR_TO_DATE('"+startdate+"','%Y-%m-%d')-1+"+rentdays+","+rentprice+"*"+rentdays+",NULL,NULL,NULL)");
+        	 rentid=(rentid+1)%15;
+        	 stmt.executeUpdate("DELETE from availablecampingcarlist where carid="+carid);
+        	 txtResult.setText("렌트완료");
         	 
             }
          
-         else if (e.getSource() == btnReset) {// btnReset을 눌렀을 때
-            txtResult.setText("");//화면의 텍스트들을 지우는 역할인듯
-            createTable();
-            insertMydata();
-            txtResult.setText("데이터가 초기화 되었습니다!!");
-         }
+         
          
          else if(e.getSource() == UbtnSearch1) {//검색1버튼을 눌렀을 때
         	 query = "SELECT * FROM availablecampingcarlist ";
@@ -418,17 +622,7 @@ public class BookListSwing extends JFrame implements ActionListener {
                 txtResult.append(str);
         						}
          }
-         else if(e.getSource() == btnSearch2) {//검색2버튼을 눌렀을 때
-        	 query = "SELECT * FROM Orders";
-         	txtResult.setText("");
-         	txtResult.setText("ORDERID \t CUSTID \t BOOKID \t SALEPRICE \t ORDERDATE\n");
-         	rs = stmt.executeQuery(query);
-         	while (rs.next()) {
-                 String str = rs.getInt(1) + "\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5)
-                       + "\n";
-                 txtResult.append(str);
-         						}
-          }
+        
          else if(e.getSource() == btnSearch3) {//검색3버튼을 눌렀을 때
         	 query = "SELECT * FROM Customer";
          	txtResult.setText("");
@@ -446,6 +640,7 @@ public class BookListSwing extends JFrame implements ActionListener {
          System.out.println("쿼리 읽기 실패 :" + e2);
          txtResult.setText("오류 메세지 :" + e2);
          
+         
 /*      } finally {
          try {
             if (rs != null)
@@ -458,6 +653,78 @@ public class BookListSwing extends JFrame implements ActionListener {
             // TODO: handle exception
          }
   */
+      }
+      try {//관리자용 에러 검출
+    	  stmt = con.createStatement();
+          String query;
+          if (e.getSource() == btnReset) {// btnReset을 눌렀을 때
+              txtResult2.setText("");//화면의 텍스트들을 지우는 역할인듯
+              createTable();
+              insertMydata();
+              txtResult2.setText("데이터가 초기화 되었습니다!!");
+           }
+          
+          else if(e.getSource() == btnSearch2) {//검색2버튼을 눌렀을 때
+         	 dialog.setVisible(true);// 모달 다이얼로그 작동시작
+         	 String tablenumber = dialog.getInputSelect();
+         	 String data1 = dialog.getInput1();
+         	 String data2 = dialog.getInput2();
+         	 String data3 = dialog.getInput3();
+         	 String data4 = dialog.getInput4();
+         	 String data5 = dialog.getInput5();
+         	 String data6 = dialog.getInput6();
+         	 String data7 = dialog.getInput7();
+         	 String data8 = dialog.getInput8();
+         	 String data9 = dialog.getInput9();
+         	 String data10 = dialog.getInput10();
+         	 dialog.resetString();
+         	 
+         	 if(tablenumber.compareTo("1")==0)
+         	 {
+         		 query = "insert into companylist values("+data1+",'"+data2+"','"+data3+"','"+data4+"','"+data5+"','"+data6+"')";
+         		 stmt.executeUpdate(query);
+         		 txtResult2.setText("캠핑카 대여회사 테이블에 입력되었습니다.");
+         		 
+         	 }
+         	 if(tablenumber.compareTo("2")==0)
+         	 {
+         		 query = "insert into campingcarlist values("+data1+",'"+data2+"',"+data3+","+data4+",'"+data5+"',STR_TO_DATE('"+data6+"','%Y-%m-%d'),"+data7+","+data8+","+data9+",STR_TO_DATE('"+data10+"','%Y-%m-%d'))";
+         		 stmt.executeUpdate(query);
+        		 txtResult2.setText("캠핑카 테이블에 입력되었습니다.");
+         	 }
+         	 if(tablenumber.compareTo("3")==0)
+         	 {
+         		 query = "insert into campingcustomer values("+data1+",'"+data2+"','"+data3+"','"+data4+"','"+data5+"')";
+         		 stmt.executeUpdate(query);
+         		 txtResult2.setText("고객 테이블에 입력되었습니다.");
+         	 }
+         	 if(tablenumber.compareTo("4")==0)
+         	 {
+         		 query = "insert into carcenterlist values("+data1+",'"+data2+"','"+data3+"','"+data4+"','"+data5+"','"+data6+"')";
+         		 stmt.executeUpdate(query);
+         		 txtResult2.setText("캠핑카정비소 테이블에 입력되었습니다.");
+         	 }
+         	 if(tablenumber.compareTo("5")==0)
+         	 {
+         		 query = "insert into FixInformation values("+data1+","+data2+","+data3+","+data4+","+data5+",'"+data6+"',STR_TO_DATE('"+data7+"','%Y-%m-%d'),"+data8+",STR_TO_DATE('"+data9+"','%Y-%m-%d'),'"+data10+"')";
+         		 stmt.executeUpdate(query);
+        		 txtResult2.setText("캠핑카정비정보 테이블에 입력되었습니다.");
+         	 }
+         	 
+         	 /*query = "SELECT * FROM Orders";
+          	txtResult.setText("");
+          	txtResult.setText("ORDERID \t CUSTID \t BOOKID \t SALEPRICE \t ORDERDATE\n");
+          	rs = stmt.executeQuery(query);
+          	while (rs.next()) {
+                  String str = rs.getInt(1) + "\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5)
+                        + "\n";
+                  txtResult.append(str);
+          						}*/
+           }
+      }
+      catch(Exception e2) {
+    	  System.out.println("쿼리 읽기 실패 :" + e2);
+          txtResult2.setText("오류 메세지 :" + e2);
       }
 
    }
