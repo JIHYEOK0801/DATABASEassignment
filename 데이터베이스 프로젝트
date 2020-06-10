@@ -685,11 +685,14 @@ public class BookListSwing extends JFrame implements ActionListener {
          		 stmt.executeUpdate(query);
          		 txtResult2.setText("캠핑카 대여회사 테이블에 입력되었습니다.");
          		 
+         		 
          	 }
          	 if(tablenumber.compareTo("2")==0)
          	 {
          		 query = "insert into campingcarlist values("+data1+",'"+data2+"',"+data3+","+data4+",'"+data5+"',STR_TO_DATE('"+data6+"','%Y-%m-%d'),"+data7+","+data8+","+data9+",STR_TO_DATE('"+data10+"','%Y-%m-%d'))";
          		 stmt.executeUpdate(query);
+         		 query = "insert into availablecampingcarlist values("+data1+",'"+data2+"',"+data3+","+data4+",'"+data5+"',STR_TO_DATE('"+data6+"','%Y-%m-%d'),"+data7+","+data8+","+data9+",STR_TO_DATE('"+data10+"','%Y-%m-%d'))";
+         		stmt.executeUpdate(query);
         		 txtResult2.setText("캠핑카 테이블에 입력되었습니다.");
          	 }
          	 if(tablenumber.compareTo("3")==0)
