@@ -73,7 +73,7 @@ class MyModalDialog extends JDialog{
 						label3.setText("주소 :");//companyaddress
 						label4.setText("전화번호 :");//companyphone
 						label5.setText("담당자 이름 :");//managername
-						label6.setText("담당자 이메일 :");//managermail
+						label6.setText("담당자 이메일 :");//manageremail
 						label7.setText("기입 X");
 						label8.setText("기입 X");
 						label9.setText("기입 X");
@@ -154,7 +154,7 @@ class MyModalDialog extends JDialog{
 						label3.setText("기입 X");//companyaddress
 						label4.setText("기입 X");//companyphone
 						label5.setText("기입 X");//managername
-						label6.setText("기입 X");//managermail
+						label6.setText("기입 X");//manageremail
 						label7.setText("기입 X");
 						label8.setText("기입 X");
 						label9.setText("기입 X");
@@ -233,9 +233,9 @@ class MyModalDialog extends JDialog{
 					label3.setText("앞부분설명 :");//companyaddress
 					label4.setText("왼쪽설명 :");//companyphone
 					label5.setText("오른쪽설명 :");//managername
-					label6.setText("뒤쪽설명 :");//managermail
+					label6.setText("뒤쪽설명 :");//manageremail
 					label7.setText("수리필요여부 (수리필요시 1 아니면 0) :");
-					label8.setText("기입 X");
+					label8.setText("운전면허증번호");
 					label9.setText("기입 X");
 					label10.setText("기입 X");
 				}
@@ -322,7 +322,7 @@ class MyModalDialog extends JDialog{
 	
 }
 public class BookListSwing extends JFrame implements ActionListener {
-   JButton btnReset, UAbtnSearch1, btnExecute, AbtnSearch1, btnRent;
+   JButton btnRent, btnReset, UbtnSearch1, btnExecute, AbtnSearch1, AbtnSearch2, AbtnSearch3, AbtnSearch4;
    JTextArea txtResult,txtResult2;
    JTextField txtField1,txtField2,txtField3,txtField4,txtField5;
    
@@ -356,9 +356,12 @@ public class BookListSwing extends JFrame implements ActionListener {
    public void layInit() {
       btnRent = new JButton("신청");
       btnReset = new JButton("초기화");
-      UAbtnSearch1 = new JButton("대여가능한 캠핑카목록 검색");
+      UbtnSearch1 = new JButton("대여가능한 캠핑카목록 검색");
       btnExecute = new JButton("data 삽입/삭제/변경 및 반환");
       AbtnSearch1 = new JButton("대여고객 및 대여차량 검색");
+      AbtnSearch2 = new JButton("수리가 필요한 차량 검색");
+      AbtnSearch3 = new JButton("정비소별 정비내역 검색");
+      AbtnSearch4 = new JButton("고객별 청구할 수리비용 검색");
       txtResult = new JTextArea();
       txtResult2 = new JTextArea();
       txtField1 = new JTextField("");
@@ -378,7 +381,7 @@ public class BookListSwing extends JFrame implements ActionListener {
       
       pn2.setLayout(new GridLayout(6,2));
       	pn2.add(new JLabel("일반사용자 버전입니다.버튼을 눌러 대여가능한 차량을 검색하세요"));
-      	pn2.add(UAbtnSearch1);
+      	pn2.add(UbtnSearch1);
       	pn2.add(new JLabel("본인의 운전면허증번호를 입력해주세요(LICENSE ID)"));
       	pn2.add(txtField1);
       	pn2.add(new JLabel("사용하시고 싶은 차량ID를 입력해주세요."));
@@ -390,10 +393,13 @@ public class BookListSwing extends JFrame implements ActionListener {
       	pn2.add(new JLabel("대여를 신청하려면 버튼을 누르세요"));
       	pn2.add(btnRent);
       
- 
+      pn4.setLayout(new FlowLayout(FlowLayout.CENTER,300,40));
       pn4.add(btnReset);//초기화버튼
       pn4.add(btnExecute);
       pn4.add(AbtnSearch1);
+      pn4.add(AbtnSearch2);
+      pn4.add(AbtnSearch3);
+      pn4.add(AbtnSearch4);
       
       txtResult.setEditable(false);
       
@@ -411,9 +417,13 @@ public class BookListSwing extends JFrame implements ActionListener {
 
       btnRent.addActionListener(this);
       btnReset.addActionListener(this);
-      UAbtnSearch1.addActionListener(this);
+      UbtnSearch1.addActionListener(this);
       btnExecute.addActionListener(this);
       AbtnSearch1.addActionListener(this);
+      AbtnSearch2.addActionListener(this);
+      AbtnSearch3.addActionListener(this);
+      AbtnSearch4.addActionListener(this);
+
       txtField1.addActionListener(this);
       txtField2.addActionListener(this);
       txtField3.addActionListener(this);
@@ -437,8 +447,6 @@ public class BookListSwing extends JFrame implements ActionListener {
           e1.printStackTrace();
        }
    }
-   
-   
    public void createTable() {//테이블 구현 Companylist,Campingcarlist,CampingCustomer,PresentRentCampingcarList,CarCheck,FixInformation,CarcenterList,AvailableCampingcarlist
 	  try { 
 	   String sql[] = new String[8];
@@ -454,7 +462,7 @@ public class BookListSwing extends JFrame implements ActionListener {
                .append("companyaddress varchar(45),")//주소
                .append("companyphone varchar(45),")//전화번호
                .append("managername varchar(45),")//담당자이름
-               .append("managermail varchar(45)")//담당자이메일
+               .append("manageremail varchar(45)")//담당자이메일
                .append(");").toString();
 	   	stmt.execute(sql[0]);
 	   	sb.delete(0,sb.length());
@@ -500,13 +508,14 @@ public class BookListSwing extends JFrame implements ActionListener {
 	   	sb.delete(0,  sb.length());
 	   			
 	   	sql[4] = sb.append("create table CarCheck(")//table5
-	   			.append("rentid INTEGER,")//고유대여번호
+	   			.append("rentid INTEGER PRIMARY KEY,")//고유대여번호
 	   			.append("carid INTEGER,")//캠핑카등록ID
 	   			.append("frontdescription varchar(45),")//앞부분설명
 	   			.append("leftdescription varchar(45),")//왼쪽설명
 	   			.append("rightdescription varchar(45),")//오른쪽설명
 	   			.append("backdescription varchar(45),")//뒤쪽설명
-	   			.append("havetofix INTEGER")//수리필요여부
+	   			.append("havetofix INTEGER,")//수리필요여부
+	   			.append("licenseid INTEGER")//운전면허증번호
 	   			.append(");").toString();
 	   	stmt.execute(sql[4]);
 	   	sb.delete(0,  sb.length());
@@ -709,15 +718,15 @@ public class BookListSwing extends JFrame implements ActionListener {
         		  rentprice = rs.getInt(8);
         	 }
         	 stmt.executeUpdate("INSERT INTO PresentRentCampingcarList VALUES ("+rentid+","+carid+","+licenseid+","+companyid+","+ "STR_TO_DATE('"+startdate+"','%Y-%m-%d'),STR_TO_DATE('"+startdate+"','%Y-%m-%d')-1+"+rentdays+","+rentprice+"*"+rentdays+",STR_TO_DATE('"+startdate+"','%Y-%m-%d')-1,NULL,NULL)");
-        	 rentid=(rentid+1)%15;
-        	 stmt.executeUpdate("DELETE from availablecampingcarlist where carid="+carid);
+        	 rentid++;
+        	 	stmt.executeUpdate("DELETE from availablecampingcarlist where carid="+carid);
         	 txtResult.setText("렌트완료");
         	 
             }
          
          
          
-         else if(e.getSource() == UAbtnSearch1) {//검색1버튼을 눌렀을 때
+         else if(e.getSource() == UbtnSearch1) {//검색1버튼을 눌렀을 때
         	 query = "SELECT * FROM availablecampingcarlist ";
         	txtResult.setText("");
         	txtResult.setText("차량 ID\t캠핑카이름\t차량번호 \t최대승차인원수  제조회사\t제조연도\t누적주행거리\t대여비용(1일)\t\n");
@@ -757,6 +766,7 @@ public class BookListSwing extends JFrame implements ActionListener {
               txtResult2.setText("");//화면의 텍스트들을 지우는 역할인듯
               createTable();
               insertMydata();
+              rentid = 0;
               txtResult2.setText("데이터가 초기화 되었습니다!!");
            }
           
@@ -765,7 +775,7 @@ public class BookListSwing extends JFrame implements ActionListener {
           
           
           else if(e.getSource() == btnExecute) {//execute버튼을 눌렀을 때
-         	 dialog.setVisible(true);// 모달 다이얼로그 작동시작
+         	 dialog.setVisible(true);// 다이얼로그 작동시작
          	 String selectnumber = dialog.getInputSelect();
          	 String tablenumber = dialog.getInputTableSelect();
          	 String data1 = dialog.getInput1();
@@ -856,7 +866,7 @@ public class BookListSwing extends JFrame implements ActionListener {
          		 String s[],d[];
          		if(tablenumber.compareTo("1")==0)
          		{
-         			s=new String[] {"companyid","companyname","companyaddress","companyphone","managername","managermail"};
+         			s=new String[] {"companyid","companyname","companyaddress","companyphone","managername","manageremail"};
          			d=new String[] {data1,data2,data3,data4,data5,data6};
          			for(int i=1;i<s.length;i++)
          			{
@@ -897,7 +907,7 @@ public class BookListSwing extends JFrame implements ActionListener {
          		}
          		else if(tablenumber.compareTo("3")==0)
          		{
-         			s = new String[] {"licenseid","customername","customeraddress","customerphone","customermail"};
+         			s = new String[] {"licenseid","customername","customeraddress","customerphone","customeremail"};
          			d = new String[] {data1,data2,data3,data4,data5};
          			for(int i=1;i<s.length;i++)
          			{
@@ -954,16 +964,12 @@ public class BookListSwing extends JFrame implements ActionListener {
          		{
          			String str="";
          		//점검내역 저장
-         			query = "insert into CarCheck values("+data1+","+data2+",'"+data3+"','"+data4+"','"+data5+"','"+data6+"',"+data7+")";
+         			query = "insert into CarCheck values("+data1+","+data2+",'"+data3+"','"+data4+"','"+data5+"','"+data6+"',"+data7+","+data8+")";
          			stmt.executeUpdate(query);
          		//현재 대여목록에서 delete
-         			//수리 = 0 이면 현재 대여목록에서 없어짐 (반환처리 ) || 수리 = 1이면 현재 대여목록에서 안없어짐 
-         			if(data7.compareTo("0")==0)
-         			{
          				query = "delete from PresentRentCampingcarList where rentid = "+data1;
          				stmt.executeUpdate(query);
-         			}
-         			
+         		
          		//수리가 필요하지 않으면 대여가능한 목록으로 이동
          			if(data7.compareTo("0")==0)
          			{
@@ -987,18 +993,63 @@ public class BookListSwing extends JFrame implements ActionListener {
           
           
           else if(e.getSource() == AbtnSearch1) {//관리자용 검색1 버튼을 눌렀을 때
-         	 query = "select presentrentcampingcarlist.rentid, campingcustomer.customername, campingcarlist.carid, campingcarlist.carname, campingcarlist.carnumber " + 
+         	 query = "select presentrentcampingcarlist.rentid, campingcarlist.carid, campingcarlist.carname, campingcustomer.licenseid, campingcustomer.customername,  campingcarlist.carnumber " + 
          	 		"from campingcustomer,presentrentcampingcarlist,campingcarlist " + 
          	 		"where presentrentcampingcarlist.licenseid = campingcustomer.licenseid and presentrentcampingcarlist.carid = campingcarlist.carid;";
           	txtResult2.setText("");
-          	txtResult2.setText("고유대여번호\t고객명\t캠핑카등록ID\t차량명\t차량번호\n");
+          	txtResult2.setText("고유대여번호\t캠핑카등록ID\t차량명\t운전면허증번호\t고객명\t차량번호\n");
           	rs = stmt.executeQuery(query);
           	while (rs.next()) {
-                  String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getInt(3) + "\t" + rs.getString(4) + "\t" +rs.getInt(5)
+                  String str = rs.getInt(1) + "\t" + rs.getInt(2) + "\t" + rs.getString(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5) + "\t" +rs.getInt(6)
                         + "\n";
                   txtResult2.append(str);
           						}
            }
+          
+          else if(e.getSource() == AbtnSearch2) {//관리자용 검색2 버튼을 눌렀을 때
+          	 query = "select campingcarlist.carid, campingcarlist.carname, campingcarlist.companyid, campingcustomer.licenseid, campingcustomer.customername, carcheck.frontdescription, carcheck.leftdescription, carcheck.rightdescription, carcheck.backdescription " + 
+          	 		"from carcheck,campingcarlist,campingcustomer " + 
+          	 		"where carcheck.havetofix=1 and carcheck.carID = campingcarlist.carid and carcheck.licenseid=campingcustomer.licenseid "+
+          	 		"order by carid;";
+           	txtResult2.setText("");
+           	txtResult2.setText("캠핑카등록ID\t캠핑카 이름\t캠핑카대여회사ID    운전면허증번호    고객명\t앞부분\t왼쪽부분\t오른쪽부분\t뒷부분\n");
+           	rs = stmt.executeQuery(query);
+           	while (rs.next()) {
+                   String str = rs.getInt(1) + "\t"+ rs.getString(2) + "\t"+ rs.getInt(3) + "\t       " + rs.getInt(4) + "\t          " + rs.getString(5) + "\t" + rs.getString(6) + "\t" + rs.getString(7) + "\t" + rs.getString(8) + "\t" + rs.getString(9)
+                         + "\n";
+                   txtResult2.append(str);
+           						}
+            }
+          else if(e.getSource() == AbtnSearch3) {//관리자용 검색3 버튼을 눌렀을 때
+           	 query = "select  carcenterlist.carcenterid, carcenterlist.carcentername, fixinformation.fixid, fixinformation.companyid, companylist.companyname, fixinformation.carid, campingcarlist.carname, fixinformation.fixdate " + 
+           	 		"from fixinformation,carcenterlist,campingcarlist,companylist " + 
+           	 		"where fixinformation.carcenterid = carcenterlist.carcenterid and fixinformation.carid = campingcarlist.carid and fixinformation.companyid = companylist.companyid " + 
+           	 		"order by carcenterid;";
+            	txtResult2.setText("");
+            	txtResult2.setText("정비소ID\t정비소 이름\t정비번호\t대여회사ID\t대여회사이름 \t캠핑카등록ID\t캠핑카 이름\t수리날짜\n");
+            	rs = stmt.executeQuery(query);
+            	while (rs.next()) {
+                    String str = rs.getInt(1) + "\t"+ rs.getString(2) + "\t"+ rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5) + "\t" + rs.getInt(6) + "\t" + rs.getString(7) + "\t" + rs.getString(8)
+                          + "\n";
+                    txtResult2.append(str);
+            						}
+             }
+          else if(e.getSource() == AbtnSearch4) {//관리자용 검색4 버튼을 눌렀을 때
+            	 query = "select campingcustomer.licenseid, campingcustomer.customername, sum(fixinformation.fixprice) " + 
+            	 		"from campingcustomer,fixinformation " + 
+            	 		"where campingcustomer.licenseid = fixinformation.licenseid " + 
+            	 		"Group by campingcustomer.customername " + 
+            	 		"order by campingcustomer.customername;";
+             	txtResult2.setText("");
+             	txtResult2.setText("운전면허증번호\t고객명\t수리비용\n");
+             	rs = stmt.executeQuery(query);
+             	while (rs.next()) {
+                     String str = rs.getInt(1) + "\t"+ rs.getString(2) + "\t"+ rs.getInt(3)
+                           + "\n";
+                     txtResult2.append(str);
+             						}
+              }
+          
       }
       catch(Exception e2) {
     	  System.out.println("쿼리 읽기 실패 :" + e2);
