@@ -11,7 +11,7 @@ import javax.swing.*;
 
 
 public class BookListSwing extends JFrame implements ActionListener {
-   JButton btnReset, btnSearch1, btnSearch2, btnSearch3, btnOk, btnTable;
+   JButton btnReset, btnSearchDoctors, btnSearchNurses, btnSearchPatients, btnSearchTreatments,btnSearchCharts,btnOk, btnTable;
    JTextArea txtResult;
    JTextField txtTable,txtField1,txtField2,txtField3,txtField4,txtField5,txtField6,txtField7,txtField8,txtField9,txtField10;
    JLabel labelD1,labelD2,labelD3,labelD4,labelD5,labelD6,labelD7,labelD8,labelD9,labelD10;
@@ -32,7 +32,7 @@ public class BookListSwing extends JFrame implements ActionListener {
       layInit();
       conDB();
       setVisible(true);
-      setBounds(500, 20, 600, 1000); //가로위치,세로위치,가로길이,세로길이
+      setBounds(500, 20, 1000, 1000); //가로위치,세로위치,가로길이,세로길이
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    }
 
@@ -51,9 +51,11 @@ public class BookListSwing extends JFrame implements ActionListener {
 	  btnTable = new JButton("테이블선택");
       btnOk = new JButton("입력");
       btnReset = new JButton("초기화");
-      btnSearch1 = new JButton("검색1");
-      btnSearch2 = new JButton("검색2");
-      btnSearch3 = new JButton("검색3");
+      btnSearchDoctors = new JButton("의사 테이블 검색");
+      btnSearchNurses = new JButton("간호사 테이블 검색");
+      btnSearchPatients = new JButton("환자 테이블 검색");
+      btnSearchTreatments = new JButton("진료 테이블 검색");
+      btnSearchCharts = new JButton("차트 테이블 검색");
       txtResult = new JTextArea();
       txtTable = new JTextField("");
       txtField1 = new JTextField("");
@@ -71,9 +73,11 @@ public class BookListSwing extends JFrame implements ActionListener {
       pn2 = new JPanel();
      
       pn1.add(btnReset);//초기화버튼
-      pn1.add(btnSearch1);//검색 1버튼 
-      pn1.add(btnSearch2);//검색 2버튼
-      pn1.add(btnSearch3);//검색 3버튼
+      pn1.add(btnSearchDoctors);//검색 1버튼 
+      pn1.add(btnSearchNurses);//검색 2버튼
+      pn1.add(btnSearchPatients);//검색 3버튼
+      pn1.add(btnSearchTreatments);//검색 4버튼
+      pn1.add(btnSearchCharts);//검색 5버튼
       pn2.setLayout(new GridLayout(13,2));
 
       pn2.add(new JLabel("Table 번호를 입력해주세요 :"));
@@ -113,9 +117,11 @@ public class BookListSwing extends JFrame implements ActionListener {
       btnTable.addActionListener(this);
       btnOk.addActionListener(this);
       btnReset.addActionListener(this);
-      btnSearch1.addActionListener(this);
-      btnSearch2.addActionListener(this);
-      btnSearch3.addActionListener(this);
+      btnSearchDoctors.addActionListener(this);
+      btnSearchNurses.addActionListener(this);
+      btnSearchPatients.addActionListener(this);
+      btnSearchTreatments.addActionListener(this);
+      btnSearchCharts.addActionListener(this);
       txtTable.addActionListener(this);
       txtField1.addActionListener(this);
       txtField2.addActionListener(this);
@@ -597,35 +603,57 @@ public class BookListSwing extends JFrame implements ActionListener {
      		
          }
          
-         else if(e.getSource() == btnSearch1) {//검색1버튼을 눌렀을 때
-        	 query = "SELECT * FROM Book ";
+         else if(e.getSource() == btnSearchDoctors) {//
+        	 query = "SELECT * FROM doctors ";
         	txtResult.setText("");
-        	txtResult.setText("BOOKID \t BOOK NAME \t PUBLISHER \t PRICE\n");
+        	txtResult.setText("의사 ID \t 담당진료과목 \t 성명 \t 성별\t 전화번호\t 이메일\t          직급\n");
         	rs = stmt.executeQuery(query);
         	while (rs.next()) {
-                String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3) + "\t" + rs.getInt(4)
+                String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3) + "\t" + rs.getString(4)+ "\t" + rs.getString(5)+ "\t" + rs.getString(6)+ "         " + rs.getString(7)
                       + "\n";
                 txtResult.append(str);
         						}
          }
-         else if(e.getSource() == btnSearch2) {//검색2버튼을 눌렀을 때
-        	 query = "SELECT * FROM Orders";
+         else if(e.getSource() == btnSearchNurses) {//
+        	 query = "SELECT * FROM nurses";
          	txtResult.setText("");
-         	txtResult.setText("ORDERID \t CUSTID \t BOOKID \t SALEPRICE \t ORDERDATE\n");
+         	txtResult.setText("간호사 ID \t 담당업무 \t 성명 \t 성별 \t 전화번호\t 이메일\t          직급\n");
          	rs = stmt.executeQuery(query);
          	while (rs.next()) {
-                 String str = rs.getInt(1) + "\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t" + rs.getInt(4) + "\t" + rs.getString(5)
+                 String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3) + "\t" + rs.getString(4) + "\t" + rs.getString(5)+ "\t" + rs.getString(6)+ "         " + rs.getString(7)
                        + "\n";
                  txtResult.append(str);
          						}
           }
-         else if(e.getSource() == btnSearch3) {//검색3버튼을 눌렀을 때
-        	 query = "SELECT * FROM Customer";
+         else if(e.getSource() == btnSearchPatients) {//검색3버튼을 눌렀을 때
+        	 query = "SELECT * FROM patients";
          	txtResult.setText("");
-         	txtResult.setText("CUSTID \t NAME \t ADDRESS \t\t  PHONE\n");
+         	txtResult.setText("환자 ID \t 간호사 ID \t 의사 ID \t 환자성명\t 환자성별\t 주민번호\t주소\t전화번호\t이메일\t직업\n");
          	rs = stmt.executeQuery(query);
          	while (rs.next()) {
-                 String str = rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3) + "\t\t" + rs.getString(4)
+                 String str = rs.getInt(1) + "\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t" + rs.getString(4)+ "\t" + rs.getString(5)+ "\t" + rs.getString(6)+ "\t" + rs.getString(7)+ "\t" + rs.getString(8)+ "\t" + rs.getString(9)+ "\t" + rs.getString(10)
+                       + "\n";
+                 txtResult.append(str);
+         						}
+          }
+         else if(e.getSource() == btnSearchTreatments) {//검색3버튼을 눌렀을 때
+        	 query = "SELECT * FROM treatments";
+         	txtResult.setText("");
+         	txtResult.setText("진료 ID \t 환자 ID \t 의사 ID \t 진료내용 \t\t 진료날짜\n");
+         	rs = stmt.executeQuery(query);
+         	while (rs.next()) {
+                 String str = rs.getInt(1) + "\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t" + rs.getString(4)+ "\t\t" + rs.getString(5)
+                       + "\n";
+                 txtResult.append(str);
+         						}
+          }
+         else if(e.getSource() == btnSearchCharts) {//검색3버튼을 눌렀을 때
+        	 query = "SELECT * FROM charts";
+         	txtResult.setText("");
+         	txtResult.setText("차트번호 \t 진료 ID \t 의사 ID \t 환자 ID \t 간호사 ID \t 차트내용 \n");
+         	rs = stmt.executeQuery(query);
+         	while (rs.next()) {
+                 String str = rs.getString(1) + "\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t" + rs.getInt(4)+ "\t" + rs.getInt(5)+ "\t" + rs.getString(6)
                        + "\n";
                  txtResult.append(str);
          						}
