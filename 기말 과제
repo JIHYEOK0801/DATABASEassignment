@@ -11,7 +11,7 @@ import javax.swing.*;
 
 
 public class BookListSwing extends JFrame implements ActionListener {
-   JButton btnReset, btnSearchDoctors, btnSearchNurses, btnSearchPatients, btnSearchTreatments,btnSearchCharts,btnOk, btnTable;
+   JButton btnReset, btnSearchDoctors, btnSearchNurses, btnSearchPatients, btnSearchTreatments,btnSearchCharts,btnOk, btnTable,btnSearch2,btnSearch3;
    JTextArea txtResult;
    JTextField txtTable,txtField1,txtField2,txtField3,txtField4,txtField5,txtField6,txtField7,txtField8,txtField9,txtField10;
    JLabel labelD1,labelD2,labelD3,labelD4,labelD5,labelD6,labelD7,labelD8,labelD9,labelD10;
@@ -32,7 +32,7 @@ public class BookListSwing extends JFrame implements ActionListener {
       layInit();
       conDB();
       setVisible(true);
-      setBounds(500, 20, 1000, 1000); //가로위치,세로위치,가로길이,세로길이
+      setBounds(500, 20, 1200, 1000); //가로위치,세로위치,가로길이,세로길이
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    }
 
@@ -56,6 +56,8 @@ public class BookListSwing extends JFrame implements ActionListener {
       btnSearchPatients = new JButton("환자 테이블 검색");
       btnSearchTreatments = new JButton("진료 테이블 검색");
       btnSearchCharts = new JButton("차트 테이블 검색");
+      btnSearch2 = new JButton("검색기능2");
+      btnSearch3 = new JButton("검색기능3");
       txtResult = new JTextArea();
       txtTable = new JTextField("");
       txtField1 = new JTextField("");
@@ -78,9 +80,12 @@ public class BookListSwing extends JFrame implements ActionListener {
       pn1.add(btnSearchPatients);//검색 3버튼
       pn1.add(btnSearchTreatments);//검색 4버튼
       pn1.add(btnSearchCharts);//검색 5버튼
+      pn1.add(btnSearch2);
+      pn1.add(btnSearch3);
+      
       pn2.setLayout(new GridLayout(13,2));
 
-      pn2.add(new JLabel("Table 번호를 입력해주세요 :"));
+      pn2.add(new JLabel("Table 번호를 입력하고 선택 버튼을 눌러주세요 :"));
       pn2.add(txtTable);
       pn2.add(new JLabel("1.의사 / 2.간호사 / 3.환자 / 4.진료  / 5.차트"));
       pn2.add(btnTable);
@@ -122,6 +127,8 @@ public class BookListSwing extends JFrame implements ActionListener {
       btnSearchPatients.addActionListener(this);
       btnSearchTreatments.addActionListener(this);
       btnSearchCharts.addActionListener(this);
+      btnSearch2.addActionListener(this);
+      btnSearch3.addActionListener(this);
       txtTable.addActionListener(this);
       txtField1.addActionListener(this);
       txtField2.addActionListener(this);
@@ -200,7 +207,7 @@ public class BookListSwing extends JFrame implements ActionListener {
 			           .append("nur_id INTEGER NOT NULL,")//간호사ID
 			           .append("doc_id INTEGER NOT NULL,")//의사ID
 			           .append("pat_name varchar(20) NOT NULL,")//환자성명
-			           .append("doc_gen char(1) NOT NULL,")//환자성별
+			           .append("pat_gen char(1) NOT NULL,")//환자성별
 			           .append("pat_jumin varchar(14) NOT NULL,")//주민번호
 			           .append("pat_addr varchar(100) NOT NULL,")//주소
 			           .append("pat_phone varchar(15) NULL,")//전화번호
@@ -503,10 +510,10 @@ public class BookListSwing extends JFrame implements ActionListener {
          	 }
         	 else if(tableNumber.compareTo("4")==0) {
          		labelD1.setText("진료 ID :");
-         		labelD2.setText("의사 ID :");
-         		labelD3.setText("환자 ID :");
+         		labelD2.setText("환자 ID :");
+         		labelD3.setText("의사 ID :");
          		labelD4.setText("진료내용 :");
-         		labelD5.setText("진료날짜 :");
+         		labelD5.setText("진료날짜(YYYY-MM-DD) :");
          		labelD6.setText("");
          		labelD7.setText("");
          		labelD8.setText("");
@@ -658,6 +665,38 @@ public class BookListSwing extends JFrame implements ActionListener {
                  txtResult.append(str);
          						}
           }
+         else if(e.getSource() == btnSearch2) {//검색3버튼을 눌렀을 때
+        	 query = "select pat_gen,count(*) from patients where pat_id in (select pat_id from treatments where treat_contents LIKE '%감기%') group by pat_gen;";
+         	txtResult.setText("");
+         	txtResult.setText("select pat_gen,count(*) from patients where pat_id in (select pat_id from treatments where treat_contents LIKE '%감기%') group by pat_gen;\n\n"
+         			+ "진료내용에 감기가 들어있는 환자들의 남녀 통계\n\n"
+         			+ "성별 \t 진료건수\n");
+         	rs = stmt.executeQuery(query);
+         	while (rs.next()) {
+                 String str = rs.getString(1) + "\t" + rs.getInt(2)
+                       + "\n";
+                 txtResult.append(str);
+         						}
+          }
+         else if(e.getSource() == btnSearch3) {//검색3버튼을 눌렀을 때
+        	 query = "select major_job, count(*) from nurses"
+        	 		+ " where major_job in (select dt.major_treat from treatments tt, doctors dt where tt.doc_id = dt.doc_id"
+        	 		+ " group by dt.major_treat having count(*)>2)"
+        	 		+ " group by major_job;	";
+         	txtResult.setText("");
+         	txtResult.setText("select major_job, count(*) from nurses where major_job in (select dt.major_treat from treatments tt, doctors dt where tt.doc_id = dt.doc_id "
+         			+ "group by dt.major_treat having count(*)>2) "
+         			+ "group by major_job;\n\n"
+         			+ "진료테이블에서 2건이상의 진료가 있는 진료과목이 담당업무인 간호사들의 수\n\n"
+         			+ "담당업무 \t 간호사 수\n");
+         	rs = stmt.executeQuery(query);
+         	while (rs.next()) {
+                 String str = rs.getString(1) + "\t" + rs.getInt(2)
+                       + "\n";
+                 txtResult.append(str);
+         						}
+          }
+         
          
          
       } catch (Exception e2) {
